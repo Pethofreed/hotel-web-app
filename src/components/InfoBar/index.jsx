@@ -1,0 +1,54 @@
+import { Box, Typography } from "@mui/material";
+import { makeStyles } from 'tss-react/mui';
+import Avatar from '@mui/material/Avatar';
+
+const useStyles = makeStyles()((theme) => ({
+  container: {
+    display: 'flex',
+    width: '100%',
+    height: '50px',
+    backgroundColor: '#F0f0f0',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '0 40px',
+    boxSizing: 'border-box',
+  },
+  spanName: {
+    color: '#272639',
+    fontWeight: 'bold',
+  },
+}));
+
+const InfoBar = () => {
+
+  const { classes } = useStyles();
+  const currentSection = 'HABITACIONES';
+
+  return (
+    <Box className={classes.container}>
+      <Box>
+        <Typography>
+          {currentSection}
+        </Typography>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+        }}
+      >
+        <Avatar
+          sx={{ width: 27, height: 27, bgcolor: '#9c27b0', }}
+        >
+          L
+        </Avatar>
+        <Typography component="div">
+          ¡Hola <span className={classes.spanName}>Luis!</span>
+        </Typography>
+      </Box>
+    </Box>
+  )
+}
+
+export default InfoBar;
