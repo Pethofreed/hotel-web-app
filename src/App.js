@@ -1,9 +1,20 @@
+import {
+  BrowserRouter
+  as
+  Router,
+  Route,
+  Routes
+  } from 'react-router-dom';
+import Signin from '../src/pages/SignIn';
+
 function App() {
   return (
-    // eslint-disable-next-line react/style-prop-object
-    <div style={{ width: '40px', height: '40px', backgroundColor: 'red' }}>
-
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Signin />} />
+        <Route path="/signin" element={<Signin />} />
+      </Routes>
+    </Router>
   );
 }
 
