@@ -4,6 +4,7 @@ import Tabs from '@mui/material/Tabs';
 import { makeStyles } from 'tss-react/mui';
 import { Box, Typography } from "@mui/material";
 import CreateRoom from "../../components/CreateRoom";
+import ViewRooms from "../../components/ViewRooms";
 
 const useStyles = makeStyles()((theme) => ({
   mainContainer: {
@@ -58,7 +59,7 @@ const ManageResources = () => {
       </Tabs>
 
       <TabPanel value={value} index={0}>
-        Acá la lista de rooms
+        <ViewRooms />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <CreateRoom />
