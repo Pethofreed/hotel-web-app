@@ -7,6 +7,7 @@ import DomainAddRoundedIcon from '@mui/icons-material/DomainAddRounded';
 import PowerSettingsNewRoundedIcon from '@mui/icons-material/PowerSettingsNewRounded';
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from "react-redux"
 
 const useStyles = makeStyles()((theme) => ({
   navSection: {
@@ -41,8 +42,15 @@ const useStyles = makeStyles()((theme) => ({
 }));
 
 const SideBar = () => {
-  const { classes } = useStyles();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { classes } = useStyles();
+
+  const handleNavigate = (section, url) => {
+    dispatch({ type: 'CHANGE_SECTION', payload: section });
+    navigate(url);
+  };
+
   return (
     <Box
       sx={{
@@ -55,13 +63,13 @@ const SideBar = () => {
         p: 2,
       }}
     >
-      <Box className={classes.navSection} onClick={() => navigate('rooms')}>
+      <Box className={classes.navSection} onClick={() => handleNavigate('habitaciones', 'rooms')}>
         <Box className={classes.flexInline}>
           <IconButton className={classes.iconButtonColor}>
             <HomeRoundedIcon />
           </IconButton>
           <Typography className={classes.boldText}>
-            HABITACIONES
+            INICIO
           </Typography>
         </Box>
         <KeyboardArrowRightRoundedIcon />
@@ -69,7 +77,7 @@ const SideBar = () => {
 
       <Box className={classes.divider} />
 
-      <Box className={classes.navSection} onClick={() => navigate('manage-rooms')}>
+      <Box className={classes.navSection} onClick={() => handleNavigate('administrar habitaciones', 'manage-rooms')}>
         <Box className={classes.flexInline}>
           <IconButton className={classes.iconButtonColor}>
             <DomainAddRoundedIcon />
@@ -81,7 +89,7 @@ const SideBar = () => {
         <KeyboardArrowRightRoundedIcon />
       </Box>
 
-      <Box className={classes.navSection}>
+      <Box className={classes.navSection} onClick={() => handleNavigate('reporte de ventas', 'sales-reports')}>
         <Box className={classes.flexInline}>
           <IconButton className={classes.iconButtonColor}>
             <ArticleRoundedIcon />
@@ -95,7 +103,7 @@ const SideBar = () => {
 
       <Box className={classes.divider} />
 
-      <Box className={classes.navSection}>
+      <Box className={classes.navSection} onClick={() => navigate('/')}>
         <Box className={classes.flexInline}>
           <IconButton className={classes.iconButtonColor}>
             <PowerSettingsNewRoundedIcon />

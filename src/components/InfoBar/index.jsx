@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { makeStyles } from 'tss-react/mui';
 import Avatar from '@mui/material/Avatar';
+import { useSelector } from "react-redux"
 
 const useStyles = makeStyles()((theme) => ({
   container: {
@@ -12,23 +13,34 @@ const useStyles = makeStyles()((theme) => ({
     alignItems: 'center',
     padding: '0 40px',
     boxSizing: 'border-box',
+    borderBottom: '2px solid #ccc',
   },
   spanName: {
     color: '#272639',
     fontWeight: 'bold',
+  },
+  sectionTitle: {
+    textTransform: 'uppercase',
+    fontWeight: 'bold',
+    borderBottom: '2px solid #ccc',
   },
 }));
 
 const InfoBar = () => {
 
   const { classes } = useStyles();
-  const currentSection = 'HABITACIONES';
+
+  const {
+    section
+  } = useSelector(({SectionReducer})=> ({
+    section: SectionReducer.section,
+  }))
 
   return (
     <Box className={classes.container}>
       <Box>
-        <Typography>
-          {currentSection}
+        <Typography className={classes.sectionTitle}>
+          {section}
         </Typography>
       </Box>
       <Box
