@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Box, Typography } from "@mui/material";
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { makeStyles } from 'tss-react/mui';
+import { Box, Typography } from "@mui/material";
+import CreateRoom from "../../components/CreateRoom";
 
 const useStyles = makeStyles()((theme) => ({
   mainContainer: {
@@ -60,7 +61,7 @@ const ManageResources = () => {
         Acá la lista de rooms
       </TabPanel>
       <TabPanel value={value} index={1}>
-        formulario para crear habitacion
+        <CreateRoom />
       </TabPanel>
       <TabPanel value={value} index={2}>
         Actualizar, eliminar, etc
