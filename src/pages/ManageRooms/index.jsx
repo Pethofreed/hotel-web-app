@@ -5,6 +5,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
+import ManageResources from '../ManageResources';
 
 const useStyles = makeStyles()((theme) => ({
   roomsContainer: {
@@ -30,50 +31,63 @@ const useStyles = makeStyles()((theme) => ({
 
 const ManageRooms = () => {
   const { classes } = useStyles();
-  const [secretToken, setSecretToken] = useState('');
+  const [access, setAcceess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [secretToken, setSecretToken] = useState('');
+  const [tokenError, setTokenError] = useState(false);
 
   const handleTokenVerification = () => {
     setLoading(true);
+    if (secretToken === 'admin') setAcceess(true);
+    setTokenError(true);
+    setLoading(false);
   };
 
   return (
     <Box className={classes.roomsContainer}>
-      <Alert severity="warning">Esta sección es privada, para continuar ingrese su token.</Alert>
-      <Box sx={{ boxShadow: 3 }} className={classes.paper}>
-        <TextField
-          size="small"
-          label="Token de ingreso"
-          fullWidth
-          value={secretToken}
-          type="password"
-          onChange={(e) => setSecretToken(e.target.value)}
-          inputProps={{
-            autoComplete: 'new-password',
-          }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <LockOutlinedIcon />
-              </InputAdornment>
-            ),
-          }}
-        />
-
-        <Box className={classes.flexCenter}>
-          {loading ? (
-            <CircularProgress  />
-          ) : (
-            <Button
-              variant="contained"
-              onClick={handleTokenVerification}
+      {!access ? (
+        <>
+          <Alert severity="warning">Esta sección es privada, para continuar ingrese su token.</Alert>
+          <Box sx={{ boxShadow: 3 }} className={classes.paper}>
+            <TextField
               size="small"
-            >
-              Autenticar
-            </Button>
-          )}
-        </Box>
-      </Box>
+              error={tokenError}
+              label={tokenError ? "Error" : "Token de ingreso"}
+              helperText={tokenError && "Token incorrecto"}
+              fullWidth
+              value={secretToken}
+              type="password"
+              onChange={(e) => setSecretToken(e.target.value)}
+              inputProps={{
+                autoComplete: 'new-password',
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LockOutlinedIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+
+            <Box className={classes.flexCenter}>
+              {loading ? (
+                <CircularProgress  />
+              ) : (
+                <Button
+                  variant="contained"
+                  onClick={handleTokenVerification}
+                  size="small"
+                >
+                  Autenticar
+                </Button>
+              )}
+            </Box>
+          </Box>
+        </>
+      ) : (
+        <ManageResources />
+      )}
     </Box>
   )
 }
