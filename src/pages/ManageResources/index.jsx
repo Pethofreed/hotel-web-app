@@ -55,7 +55,6 @@ const ManageResources = () => {
       <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
         <Tab label="Habitaciones" {...a11yProps(0)} />
         <Tab label="Crear" {...a11yProps(1)} />
-        <Tab label="Modificar" {...a11yProps(2)} />
       </Tabs>
 
       <TabPanel value={value} index={0}>
@@ -63,9 +62,6 @@ const ManageResources = () => {
       </TabPanel>
       <TabPanel value={value} index={1}>
         <CreateRoom />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        Actualizar, eliminar, etc
       </TabPanel>
     </Box>
   )
