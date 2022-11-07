@@ -1,23 +1,25 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect } from "react";
+import { Box, Typography } from "@mui/material";
 import RoomCard from "../../components/RoomCard";
+import { getRooms } from "../../store/RoomReducer";
+import { useDispatch, useSelector } from "react-redux";
 
 const Rooms = () => {
 
-  const data = [
-    { name: 202, status: 'free' },
-    { name: 204, status: 'occupied' },
-    { name: 305, status: 'cleaning' },
-    { name: 307, status: 'free' },
-    { name: 202, status: 'free' },
-    { name: 204, status: 'occupied' },
-    { name: 305, status: 'cleaning' },
-    { name: 307, status: 'free' },
-    { name: 202, status: 'free' },
-    { name: 204, status: 'occupied' },
-    { name: 305, status: 'cleaning' },
-    { name: 307, status: 'free' },
-  ];
+  const dispatch = useDispatch()
+
+  const {
+    rooms
+  } = useSelector(({ RoomReducer }) => ({
+    rooms: RoomReducer.rooms
+  }));
+
+  useEffect(() => {
+    dispatch(getRooms())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const hasData = !!rooms && rooms.length > 0;
 
   return (
     <>
@@ -27,12 +29,29 @@ const Rooms = () => {
           flexWrap: 'wrap',
         }}
       >
-        {data.map(room => (
-          <RoomCard
-            room={room}
-          />
+        {hasData && rooms.map(room => (
+          room.available && (
+            <RoomCard
+              key={room.name}
+              room={room}
+            />
+          )
         ))}
       </Box>
+      {!hasData && (
+        <Box
+          sx={{
+            height: '400px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Typography textAlign="center" variant="h4">
+            No existen habitaciones
+          </Typography>
+        </Box>
+      )}
     </>
   );
 };

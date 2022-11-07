@@ -1,37 +1,37 @@
 import axios from "axios";
 
-const ROOMS_SUCCESS = 'ROOMS_SUCCESS';
-const ROOMS_ERROR = 'ROOMS_ERROR';
+const CONTRACT_SUCCESS = 'CONTRACT_SUCCESS';
+const CONTRACT_ERROR = 'CONTRACT_ERROR';
 
 
 const initialState = {
-  rooms: {},
+  contracts: {},
   error: null,
 }
 
-export const getRooms = () => {
+export const getContracts = () => {
   return async function(dispatch){
     try {
       const { data } = await axios({
         method: 'GET',
         baseURL: process.env.REACT_APP_SERVER || 'http://localhost:8000',
-        url: '/rooms/get',
+        url: '/contracts/get',
       })
-      dispatch({type: ROOMS_SUCCESS, payload: data })
+      dispatch({type: CONTRACT_SUCCESS, payload: data })
     } catch (error) {
-      dispatch({type: ROOMS_ERROR, payload: error })
+      dispatch({type: CONTRACT_ERROR, payload: error })
     }
   }
 }
 
 export function RoomReducer(state = initialState, action){
   switch(action.type) {
-    case ROOMS_SUCCESS:
+    case CONTRACT_SUCCESS:
       return {
         ...state,
-        rooms: action.payload,
+        contracts: action.payload,
       }
-    case ROOMS_ERROR:
+    case CONTRACT_ERROR:
       return {
         ...state,
         error: action.payload,

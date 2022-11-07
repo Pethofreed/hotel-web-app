@@ -19,7 +19,6 @@ const SignIn = () => {
 
   const handleSignIn = () => {
     setLoading(true);
-    console.log('xxx iniciando sesion');
     navigate('dashboard')
     // setLoading(false);
   };

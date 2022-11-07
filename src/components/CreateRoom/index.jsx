@@ -44,7 +44,7 @@ const CreateRoom = () => {
         method: 'POST',
         baseURL: process.env.REACT_APP_SERVER || 'http://localhost:8000',
         url: '/rooms/create',
-        data: { name, available },
+        data: { name, available, status: 'free' },
         // headers: {
         //   'Authorization': `Bearer ${token}`
         // },
