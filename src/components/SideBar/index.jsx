@@ -6,6 +6,7 @@ import ArticleRoundedIcon from '@mui/icons-material/ArticleRounded';
 import DomainAddRoundedIcon from '@mui/icons-material/DomainAddRounded';
 import PowerSettingsNewRoundedIcon from '@mui/icons-material/PowerSettingsNewRounded';
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
+import HailRoundedIcon from '@mui/icons-material/HailRounded';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux"
 
@@ -96,6 +97,18 @@ const SideBar = () => {
           </IconButton>
           <Typography className={classes.boldText}>
             REPORTES
+          </Typography>
+        </Box>
+        <KeyboardArrowRightRoundedIcon />
+      </Box>
+
+      <Box className={classes.navSection} onClick={() => handleNavigate('Reservas', 'reservations')}>
+        <Box className={classes.flexInline}>
+          <IconButton className={classes.iconButtonColor}>
+            <HailRoundedIcon />
+          </IconButton>
+          <Typography className={classes.boldText}>
+            RESERVAS
           </Typography>
         </Box>
         <KeyboardArrowRightRoundedIcon />

@@ -1,15 +1,41 @@
-const CHANGE_SECTION = 'CHANGE_SECTION'
+import axios from "axios";
+
+const ROOMS_SUCCESS = 'ROOMS_SUCCESS';
+const ROOMS_ERROR = 'ROOMS_ERROR';
+
 
 const initialState = {
-  section: 'view',
+  rooms: {},
+  error: null,
+}
+
+export const getRooms = () => {
+  return async function(dispatch){
+    try {
+      const { data } = await axios({
+        method: 'GET',
+        baseURL: process.env.REACT_APP_SERVER || 'http://localhost:8000',
+        url: '/rooms/get',
+      })
+      console.log('xxx data: ', data);
+      dispatch({type: ROOMS_SUCCESS, payload: data })
+    } catch (error) {
+      dispatch({type: ROOMS_ERROR, payload: error })
+    }
+  }
 }
 
 export function RoomReducer(state = initialState, action){
   switch(action.type) {
-    case CHANGE_SECTION:
+    case ROOMS_SUCCESS:
       return {
         ...state,
-        section: action.payload,
+        rooms: action.payload,
+      }
+    case ROOMS_ERROR:
+      return {
+        ...state,
+        error: action.payload,
       }
     default:
       return state

@@ -1,11 +1,11 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-// import { RoomReducer } from './StorageReducer';
-import { SectionReducer } from './SectionReducer';
-import logger from 'redux-logger';
 import thunk from 'redux-thunk';
+import logger from 'redux-logger';
+import { RoomReducer } from './RoomReducer';
+import { SectionReducer } from './SectionReducer';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 
 const appReducers = combineReducers({
-  // RoomReducer,
+  RoomReducer,
   SectionReducer,
 })
 
