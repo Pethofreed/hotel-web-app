@@ -66,6 +66,42 @@ function BootstrapDialogTitle(props) {
   );
 }
 
+const sx = {
+  color: 'white',
+  width: '50px',
+  height: '50px',
+}
+
+const colors = {
+  free: 'success.light',
+  occupied: 'error.light',
+  cleaning: 'warning.light',
+};
+
+const hover = {
+  free: 'success.main',
+  occupied: 'error.main',
+  cleaning: 'warning.main',
+};
+
+const estado = {
+  free: 'Libre',
+  occupied: 'Ocupado',
+  cleaning: 'Limpieza',
+};
+
+const icon = {
+  free: <BedroomParentRoundedIcon sx={sx} />,
+  occupied: <BlockRoundedIcon sx={sx}  />,
+  cleaning: <CleaningServicesRoundedIcon sx={sx}  />,
+};
+
+const labelButton = {
+  free: 'Crear contrato',
+  occupied: 'Terminar contrato',
+  cleaning: 'Habilitar',
+}
+
 const RoomCard = ({ room }) => {
 
   const dispatch = useDispatch();
@@ -86,42 +122,6 @@ const RoomCard = ({ room }) => {
   const [wayToPay, setWayToPay] = useState('cash');
   const [openModal, setOpenModal] = useState(false);
   const [numberClients, setNumberClients] = useState([1]);
-
-   const sx = {
-    color: 'white',
-    width: '50px',
-    height: '50px',
-  }
-
-  const colors = {
-    free: 'success.light',
-    occupied: 'error.light',
-    cleaning: 'warning.light',
-  };
-
-  const hover = {
-    free: 'success.main',
-    occupied: 'error.main',
-    cleaning: 'warning.main',
-  };
-
-  const estado = {
-    free: 'Libre',
-    occupied: 'Ocupado',
-    cleaning: 'Limpieza',
-  };
-
-  const icon = {
-    free: <BedroomParentRoundedIcon sx={sx} />,
-    occupied: <BlockRoundedIcon sx={sx}  />,
-    cleaning: <CleaningServicesRoundedIcon sx={sx}  />,
-  };
-
-  const labelButton = {
-    free: 'Crear contrato',
-    occupied: 'Terminar contrato',
-    cleaning: 'Habilitar',
-  }
 
   const { name, status } = room;
 

@@ -4,13 +4,14 @@ import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import MuiAlert from '@mui/material/Alert';
+import Avatar from '@mui/material/Avatar';
 import Dialog from '@mui/material/Dialog';
 import Snackbar from '@mui/material/Snackbar';
 import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
+import BedIcon from '@mui/icons-material/Bed';
 import TableBody from '@mui/material/TableBody';
 import TableHead from '@mui/material/TableHead';
-import { Button, IconButton, Typography } from "@mui/material";
 import { getRooms } from "../../store/RoomReducer";
 import DialogTitle from '@mui/material/DialogTitle';
 import { useDispatch, useSelector } from "react-redux";
@@ -18,11 +19,14 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import TableContainer from '@mui/material/TableContainer';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import { Button, IconButton, Typography } from "@mui/material";
+import BlockRoundedIcon from '@mui/icons-material/BlockRounded';
 import DialogContentText from '@mui/material/DialogContentText';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import ChangeCircleRoundedIcon from '@mui/icons-material/ChangeCircleRounded';
 import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
+import CleaningServicesRoundedIcon from '@mui/icons-material/CleaningServicesRounded';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -37,6 +41,18 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 14,
   },
 }));
+
+const icon = {
+  free: <BedIcon sx={{ width:'15px' }} />,
+  occupied: <BlockRoundedIcon sx={{ width:'15px' }} />,
+  cleaning: <CleaningServicesRoundedIcon sx={{ width:'15px' }} />,
+};
+
+const statusColor = {
+  free: 'success.light',
+  occupied: 'error.light',
+  cleaning: 'warning.light',
+};
 
 const ViewRooms = () => {
 
@@ -58,8 +74,8 @@ const ViewRooms = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  function createData(_id, name, available, createdAt) {
-    return {_id, name, available, createdAt };
+  function createData(_id, name, available, createdAt, status) {
+    return {_id, name, available, createdAt, status };
   }
 
   const getDate = (date) => {
@@ -87,7 +103,7 @@ const ViewRooms = () => {
   };
 
   const dataReady = !!rooms && rooms.length > 0;
-  const rows = dataReady && rooms.map((room) => createData(room._id, room.name, room.available, room.createdAt));
+  const rows = dataReady && rooms.map((room) => createData(room._id, room.name, room.available, room.createdAt, room.status));
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -107,6 +123,8 @@ const ViewRooms = () => {
     setMessage(message);
   };
 
+  console.log('xxx roomData: ', roomData);
+
   return (
     <>
       <TableContainer component={Paper}>
@@ -114,6 +132,7 @@ const ViewRooms = () => {
           <TableHead>
             <TableRow>
               <StyledTableCell>Habitacion</StyledTableCell>
+              <StyledTableCell>Estado</StyledTableCell>
               <StyledTableCell align="right">Fecha creación</StyledTableCell>
               <StyledTableCell align="right">Editar</StyledTableCell>
               <StyledTableCell align="right">Activa</StyledTableCell>
@@ -127,6 +146,13 @@ const ViewRooms = () => {
               >
                 <TableCell component="th" scope="row">
                   {row.name}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  <Avatar
+                    sx={{ width: 24, height: 24, bgcolor: statusColor[row.status] }}
+                  >
+                    {icon[row.status]}
+                  </Avatar>
                 </TableCell>
                 <TableCell align="right">
                   { getDate(row.createdAt)}
@@ -168,26 +194,49 @@ const ViewRooms = () => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          <Typography variant="h5" sx={{ display: 'flex', alignItems: 'center', gap: 1, }}>
-            <ChangeCircleRoundedIcon /> {`Cambiar estado de habitación => ${roomData.name}`}
-          </Typography>
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {`Esta habitación se encuentra actualmente en modo ${roomData.available ? 'Disponible' : 'No disponible'}`}
-          </DialogContentText>
-          <DialogContentText id="alert-dialog-description">
-            {`¿Desea cambiar su estado a "${roomData.available ? 'No disponible' : 'Disponible'}"?`}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseModal}>No</Button>
-          <Button onClick={() => changeRoomStatus(roomData)} autoFocus variant="contained">
-            Sí, cambiar
-          </Button>
-        </DialogActions>
-      </Dialog>
+        {roomData.status === 'free' || roomData.status === 'cleaning' ? (
+          <>
+            <DialogTitle id="alert-dialog-title">
+              <Typography variant="h5" sx={{ display: 'flex', alignItems: 'center', gap: 1, }}>
+                <ChangeCircleRoundedIcon /> {`Cambiar estado de habitación => ${roomData.name}`}
+              </Typography>
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                {`Esta habitación se encuentra actualmente en modo ${roomData.available ? 'Disponible' : 'No disponible'}`}
+              </DialogContentText>
+              <DialogContentText id="alert-dialog-description">
+                {`¿Desea cambiar su estado a "${roomData.available ? 'No disponible' : 'Disponible'}"?`}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseModal}>No</Button>
+              <Button onClick={() => changeRoomStatus(roomData)} autoFocus variant="contained">
+                Sí, cambiar
+              </Button>
+            </DialogActions>
+          </>
+          ) : (
+            <>
+              <DialogTitle id="alert-dialog-title">
+                <Typography variant="h5" sx={{ display: 'flex', alignItems: 'center', gap: 1, }}>
+                  <ChangeCircleRoundedIcon /> {`Cambiar estado de habitación => ${roomData.name}`}
+                </Typography>
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Esta habitación se encuentra actualmente ocupada
+                </DialogContentText>
+                <DialogContentText id="alert-dialog-description">
+                  Para inhabilitarla debe terminar el contrato que se encuentra activo.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseModal}>salir</Button>
+              </DialogActions>
+            </>
+          )}
+        </Dialog>
     </>
   );
 };
