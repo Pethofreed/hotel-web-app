@@ -19,14 +19,15 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import TableContainer from '@mui/material/TableContainer';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
-import { Button, IconButton, Typography } from "@mui/material";
 import BlockRoundedIcon from '@mui/icons-material/BlockRounded';
 import DialogContentText from '@mui/material/DialogContentText';
+import BedroomParentIcon from '@mui/icons-material/BedroomParent';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import ChangeCircleRoundedIcon from '@mui/icons-material/ChangeCircleRounded';
 import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
 import CleaningServicesRoundedIcon from '@mui/icons-material/CleaningServicesRounded';
+import { Button, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -59,9 +60,11 @@ const ViewRooms = () => {
   const dispatch = useDispatch()
   const [error, setError] = useState('');
   const [open, setOpen] = useState(false);
+  const [newName, setNewName] = useState('');
   const [roomData, setRoomData] = useState({});
   const [message, setMessage] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [openModalEdit, setOpenModalEdit] = useState(false);
 
   const {
     rooms
@@ -73,6 +76,10 @@ const ViewRooms = () => {
     dispatch(getRooms())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (roomData) setNewName(roomData.name)
+  }, [roomData])
 
   function createData(_id, name, available, createdAt, status) {
     return {_id, name, available, createdAt, status };
@@ -95,9 +102,33 @@ const ViewRooms = () => {
       })
       dispatch({type: 'ROOMS_SUCCESS', payload: data })
       setOpenModal(false);
+      setError(false);
       showAlert(`Habitación #${name} || Cambio de "${available ? 'Disponible' : 'No disponible'}" =>  ${available ? 'No disponible' : 'Disponible'}`);
     } catch (error) {
       setOpenModal(false);
+      setError(true);
+      showAlert('Error intentando cambiar el estado, contacte al admin.');
+      dispatch({type: 'ROOMS_ERROR', payload: error })
+    }
+  };
+
+  const changeRoomName = async (room) => {
+    const { _id } = room;
+    try {
+      const { data } = await axios({
+        method: 'PUT',
+        baseURL: process.env.REACT_APP_SERVER || 'http://localhost:8000',
+        url: '/rooms/update',
+        data: { _id, name: newName }
+      })
+      dispatch({type: 'ROOMS_SUCCESS', payload: data })
+      setOpenModalEdit(false);
+      showAlert('¡Cambio de nombre exitoso!');
+      setError(false);
+    } catch (error) {
+      setOpenModalEdit(false);
+      setError(true);
+      showAlert('Error intentando cambiar el nombre, contacte al admin.');
       dispatch({type: 'ROOMS_ERROR', payload: error })
     }
   };
@@ -115,6 +146,7 @@ const ViewRooms = () => {
 
   const handleCloseModal = () => {
     setOpenModal(false);
+    setOpenModalEdit(false);
     setRoomData({});
   };
 
@@ -158,7 +190,13 @@ const ViewRooms = () => {
                   { getDate(row.createdAt)}
                 </TableCell>
                 <TableCell align="right">
-                  <IconButton>
+                  <IconButton
+                    onClick={() => {
+                      setOpenModalEdit(true)
+                      setRoomData({ ...row })
+                      }
+                    }
+                  >
                     <EditRoundedIcon />
                   </IconButton>
                 </TableCell>
@@ -187,7 +225,7 @@ const ViewRooms = () => {
         </Snackbar>
       </Stack>
 
-      {/* MODAL MODAL MODAL MODAL MODAL MODAL */}
+      {/* MODAL HABILITAR INHABILITAR MODAL HABILITAR INHABILITAR MODAL  HABILITAR INHABILITAR MODAL MODAL MODAL */}
       <Dialog
         open={openModal}
         onClose={handleCloseModal}
@@ -237,6 +275,51 @@ const ViewRooms = () => {
             </>
           )}
         </Dialog>
+
+      {/* MODAL EDITAR MODAL EDITAR MODAL EDITAR MODAL EDITAR MODAL EDITAR MODAL EDITAR MODAL EDITAR MODAL EDITAR */}
+      <Dialog
+        open={openModalEdit}
+        onClose={handleCloseModal}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          <Typography variant="h5" sx={{ display: 'flex', alignItems: 'center', gap: 1, }}>
+            <EditRoundedIcon /> {`Editar habitación => ${roomData.name}`}
+          </Typography>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ pt: 1 }} id="alert-dialog-description">
+            <TextField
+              size="small"
+              label={error ? "Error" : "Nombre"}
+              helperText={error && "Nombre obligatorio"}
+              fullWidth
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              inputProps={{
+                autoComplete: 'new-password',
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <BedroomParentIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </DialogContentText>
+          <DialogContentText id="alert-dialog-description">
+
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModal}>cancelar</Button>
+          <Button onClick={() => changeRoomName(roomData)} autoFocus variant="contained">
+            guardar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
