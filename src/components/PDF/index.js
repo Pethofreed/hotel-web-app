@@ -15,18 +15,30 @@ const parseWayToPay = {
 };
 
 export const generatePDF = (contract) => {
-  console.log('xxx pdf data contract: ', contract);
   const {
     origin, destiny, country, profession, company, nit, birthday, room, departureDate,
     phone, email, rate, baggage, wayToPay, renters, dateOfAdmission, codeContract, contractStatus
   } = contract || {};
 
   // Dates
+  let spacing = 15;
   const date = moment().format('LLLL');
   const birthdate = moment(birthday).format('ll');
   const admissionDate = moment(dateOfAdmission).format('DD/MM/YYYY, h:mm a');
   const departure = moment(departureDate).format('DD/MM/YYYY, h:mm a');
-  const countHuespeds = Object.keys(renters).length;
+  const countHuespeds = Object.keys(renters || {}).length;
+
+  const getHuspedData = (key) => {
+    const { identificationCard,name, lastname } = renters[key];
+    return (
+      <>
+        ${doc.text(`${cont}.`, 20, (215 + spacing))}
+        ${doc.text(identificationCard, 40, (215 + spacing))}
+        ${doc.text(name, 130, (215 + spacing))}
+        ${doc.text(lastname, 230, (215 + spacing))}
+      </>
+    )
+  };
 
   const doc = new jsPDF('landscape', 'px', 'a5', 'false');
 
@@ -74,8 +86,25 @@ export const generatePDF = (contract) => {
   doc.text(`Contrato N° ${codeContract}`, 335, 53);
   doc.line(310, 60, 420, 60);
 
-    // Current date
-    doc.text(`${date}`, 130, 47);
+  // Current date
+  doc.text(`${date}`, 130, 47);
+
+  // Huespeds list
+  doc.text('N°', 20, 215);
+  doc.text(' N° Identificación', 40, 215);
+  doc.text(' Nombres', 130, 215);
+  doc.text(' Apellidos', 230, 215);
+
+  let cont = 1;
+  while(cont <= countHuespeds) {
+    getHuspedData(cont);
+    spacing += 15
+    cont++
+  }
+
+  // Huespeds
+  doc.setFontSize(16);
+  doc.text('Húespedes', 190, 200)
 
   // Here the file save.
   doc.save(`contrato_${codeContract}.pdf`);

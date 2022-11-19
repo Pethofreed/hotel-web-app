@@ -154,7 +154,7 @@ const RoomCard = ({ room }) => {
   const defaultValues = useMemo(() => {
     if (status === 'occupied' && dataReady) {
       const [{
-        _id, origin, destiny, country, profession, company, nit, birthday,
+        _id, origin, destiny, country, profession, company, nit, birthday, room: roomName,
         phone, email, rate, baggage, wayToPay, renters, dateOfAdmission, codeContract,
       } = {}] = contracts?.filter((data) => data.room === room.name);
 
@@ -174,6 +174,7 @@ const RoomCard = ({ room }) => {
         wayToPay,
         profession,
         codeContract,
+        room: roomName,
         dateOfAdmission,
       };
       return values;
