@@ -32,9 +32,9 @@ const CreateRoom = () => {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [open, setOpen] = useState(false);
-  const [available, setAvailable] = useState(true);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(false);
+  const [available, setAvailable] = useState(true);
   const token = localStorage.getItem("hotel-app-token");
 
   const handleCreateRoom = async () => {

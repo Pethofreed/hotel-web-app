@@ -4,7 +4,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useEffect, useState } from 'react';
 
 
-const ClientRow = ({ index, setValue }) => {
+const ClientRow = ({ index, value, setValue }) => {
 
   const [name, setName] = useState('');
   const [lastname, setLastname] = useState('');
@@ -20,7 +20,18 @@ const ClientRow = ({ index, setValue }) => {
 
   useEffect(() => {
     handleChange()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [identificationCard, name, lastname])
+
+  useEffect(() => {
+    if (value) {
+      const { identificationCard, name, lastname } = value[index] || {};
+      setName(name);
+      setLastname(lastname);
+      setIdentificationCard(identificationCard);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>

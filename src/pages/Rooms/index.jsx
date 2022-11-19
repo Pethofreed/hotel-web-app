@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import RoomCard from "../../components/RoomCard";
 import { getRooms } from "../../store/RoomReducer";
+import { getContracts } from "../../store/ContractReducer";
 import { useDispatch, useSelector } from "react-redux";
 
 const Rooms = () => {
@@ -16,6 +17,7 @@ const Rooms = () => {
 
   useEffect(() => {
     dispatch(getRooms())
+    dispatch(getContracts())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

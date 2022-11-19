@@ -155,8 +155,6 @@ const ViewRooms = () => {
     setMessage(message);
   };
 
-  console.log('xxx roomData: ', roomData);
-
   return (
     <>
       <TableContainer component={Paper}>
@@ -202,10 +200,10 @@ const ViewRooms = () => {
                 </TableCell>
                 <TableCell align="right">
                   <IconButton
-                    onClick={() => (
-                      setOpenModal(true),
+                    onClick={() => {
+                      setOpenModal(true)
                       setRoomData({ ...row })
-                    )}
+                    }}
                   >
                     {row.available === true
                       ? <CheckCircleRoundedIcon sx={{ color: 'success.light' }} />

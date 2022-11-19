@@ -52,6 +52,11 @@ const SideBar = () => {
     navigate(url);
   };
 
+  const handleLogOut = () => {
+    dispatch({ type: 'USER_LOGOUT' })
+    navigate('/');
+  };
+
   return (
     <Box
       sx={{
@@ -84,7 +89,7 @@ const SideBar = () => {
             <DomainAddRoundedIcon />
           </IconButton>
           <Typography className={classes.boldText}>
-            ADMON CUARTOS
+            ADMIN CUARTOS
           </Typography>
         </Box>
         <KeyboardArrowRightRoundedIcon />
@@ -116,7 +121,7 @@ const SideBar = () => {
 
       <Box className={classes.divider} />
 
-      <Box className={classes.navSection} onClick={() => navigate('/')}>
+      <Box className={classes.navSection} onClick={handleLogOut}>
         <Box className={classes.flexInline}>
           <IconButton className={classes.iconButtonColor}>
             <PowerSettingsNewRoundedIcon />

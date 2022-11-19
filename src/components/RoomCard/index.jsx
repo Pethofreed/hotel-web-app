@@ -1,9 +1,12 @@
+import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
+import { generatePDF } from "../PDF";
 import ClientRow from "../ClientRow";
-import React, { useState } from "react";
+import Stack from '@mui/material/Stack';
 import Slide from '@mui/material/Slide';
-import { useDispatch } from "react-redux";
+import MuiAlert from '@mui/material/Alert';
 import Divider from '@mui/material/Divider';
+import Snackbar from '@mui/material/Snackbar';
 import { styled } from '@mui/material/styles';
 import PinIcon from '@mui/icons-material/Pin';
 import WorkIcon from '@mui/icons-material/Work';
@@ -13,16 +16,19 @@ import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import { getRooms } from "../../store/RoomReducer";
 import PublicIcon from '@mui/icons-material/Public';
+import { useDispatch, useSelector } from "react-redux";
 import ApartmentIcon from '@mui/icons-material/Apartment';
+import { getContracts } from '../../store/ContractReducer';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import BlockRoundedIcon from '@mui/icons-material/BlockRounded';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import BedroomParentRoundedIcon from '@mui/icons-material/BedroomParentRounded';
 import CleaningServicesRoundedIcon from '@mui/icons-material/CleaningServicesRounded';
@@ -31,6 +37,10 @@ import { Box, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, T
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
+});
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -104,30 +114,127 @@ const labelButton = {
 
 const RoomCard = ({ room }) => {
 
+    const {
+      contracts
+    } = useSelector(({ContractReducer})=> ({
+      contracts: ContractReducer.contracts,
+    }));
+
+    const { name, status } = room;
+    const dataReady = !!contracts && contracts.length > 0;
+
+  useEffect(() => {
+    dispatch(getContracts())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const dispatch = useDispatch();
-  const [renters, setRenters] = useState({});
+  const [nit, setNit] = useState('');
+  const [rate, setRate] = useState('');
+  const [phone, setPhone] = useState('');
+  const [error, setError] = useState('');
+  const [email, setEmail] = useState('');
+  const [open, setOpen] = useState(false);
   const [origin, setOrigin] = useState('');
+  const [renters, setRenters] = useState({});
   const [destiny, setDestiny] = useState('');
   const [country, setCountry] = useState('');
-  const [profession, setProfession] = useState('');
   const [company, setCompany] = useState('');
-  const [nit, setNit] = useState('');
-  const [birthday, setBirthday] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [dateOfAdmission, setDateOfAdmission] = useState(new Date());
-  const [departureDate, setDepartureDate] = useState(new Date());
-  const [rate, setRate] = useState('');
+  const [contract, setContract] = useState({});
   const [baggage, setBaggage] = useState(true);
+  const [message, setMessage] = useState(false);
+  const [contractId, setContractId] = useState('');
+  const [profession, setProfession] = useState('');
   const [wayToPay, setWayToPay] = useState('cash');
   const [openModal, setOpenModal] = useState(false);
+  const [birthday, setBirthday] = useState(new Date());
   const [numberClients, setNumberClients] = useState([1]);
+  const [departureDate, setDepartureDate] = useState(new Date());
+  const [dateOfAdmission, setDateOfAdmission] = useState(new Date());
 
-  const { name, status } = room;
+  const defaultValues = useMemo(() => {
+    if (status === 'occupied' && dataReady) {
+      const [{
+        _id, origin, destiny, country, profession, company, nit, birthday,
+        phone, email, rate, baggage, wayToPay, renters, dateOfAdmission,
+      } = {}] = contracts?.filter((data) => data.room === room.name);
+
+      const values = {
+        _id,
+        nit,
+        rate,
+        phone,
+        email,
+        origin,
+        renters,
+        baggage,
+        destiny,
+        country,
+        company,
+        birthday,
+        wayToPay,
+        profession,
+        dateOfAdmission,
+      };
+      return values;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+  }}, [contracts]);
+
+
+  const showAlert = (message) => {
+    setOpen(true);
+    setMessage(message);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const getNumberOfClients = (number) => {
+    const clients = [];
+    let cont = 1;
+    while (cont <= number) {
+      clients.push(cont);
+      cont++
+    }
+    return clients;
+  }
+
+  useEffect(() => {
+    if (status === 'occupied' && dataReady) {
+      const {
+        _id, origin, destiny, country, profession, company, nit, birthday,
+        phone, email, rate, baggage, wayToPay, renters, dateOfAdmission,
+      } = defaultValues;
+      setNit(nit);
+      setRate(rate);
+      setEmail(email);
+      setPhone(phone);
+      setOrigin(origin);
+      setContractId(_id);
+      setDestiny(destiny);
+      setCountry(country);
+      setCompany(company);
+      setBaggage(baggage);
+      setRenters(renters);
+      setBirthday(birthday);
+      setWayToPay(wayToPay);
+      setProfession(profession);
+      setDateOfAdmission(dateOfAdmission);
+      setContract(defaultValues);
+      const length = Object.keys(renters).length;
+      setNumberClients(getNumberOfClients(length));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataReady])
+
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    setNumberClients([1])
   };
 
   const handleClientsPerRoom = () => {
@@ -170,13 +277,78 @@ const RoomCard = ({ room }) => {
             contractStatus: 'initiated',
           },
         })
+        showAlert('¡Contrato creado!');
         dispatch({type: 'CONTRACT_SUCCESS', payload: data })
         dispatch(getRooms());
         setOpenModal(false);
+        setError(false);
       } catch (error) {
+        setError(true);
+        showAlert('Ha ocurrido un error, contacte al admin.');
         dispatch({type: 'CONTRACT_ERROR', payload: error })
       }
+    } else {
+      setError(true)
+      showAlert("Faltan campos por llenar")
     }
+  };
+
+  const handleFinishContract = async () => {
+    try {
+      const { data } = await axios({
+        method: 'PUT',
+        baseURL: process.env.REACT_APP_SERVER || 'http://localhost:8000',
+        url: '/contracts/finish',
+        data: {
+          _id: contractId,
+          roomId: room._id,
+          departureDate,
+          contractStatus: 'finished',
+        },
+      })
+      dispatch({type: 'CONTRACT_SUCCESS', payload: data })
+      showAlert('Contrato finalizado');
+      dispatch(getRooms());
+      setOpenModal(false);
+      setError(false);
+    } catch (error) {
+      setError(true);
+      showAlert('Ha ocurrido un error, contacte al admin.');
+      dispatch({type: 'CONTRACT_ERROR', payload: error })
+    }
+  };
+
+  const handleEnableRoom = async () => {
+    try {
+      await axios({
+        method: 'PUT',
+        baseURL: process.env.REACT_APP_SERVER || 'http://localhost:8000',
+        url: '/rooms/update',
+        data: {
+          _id: room._id,
+          status: 'free',
+        },
+      })
+      showAlert('Habitación ahora disponible');
+      dispatch(getRooms());
+      dispatch(getContracts());
+      setOpenModal(false);
+      setError(false);
+    } catch (error) {
+      setError(true);
+      showAlert('Ha ocurrido un error, contacte al admin.');
+      dispatch({type: 'CONTRACT_ERROR', payload: error })
+    }
+  };
+
+  const handleAction = {
+    free: () => handleCreateContract(),
+    occupied: () => handleFinishContract(),
+    cleaning: () => handleEnableRoom(),
+  };
+
+  const handleModal = () => {
+    setOpenModal(true)
   };
 
   return (
@@ -199,14 +371,22 @@ const RoomCard = ({ room }) => {
             bgcolor: hover[status],
           },
         }}
-        onClick={() => setOpenModal(true)}
+        onClick={handleModal}
       >
         {icon[status]}
         <Typography sx={{ color: 'white' }} variant="h5">{name}</Typography>
         <Typography sx={{ color: 'white' }} variant="caption">{estado[status]}</Typography>
       </Box>
 
-      {/* MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL */}
+      <Stack spacing={2}>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity={error ? 'error' : 'success'} sx={{ width: '100%' }}>
+            {message}
+          </Alert>
+        </Snackbar>
+      </Stack>
+
+      {/* MODAL CONTRACT MODAL CONTRACT MODAL CONTRACT MODAL CONTRACT MODAL CONTRACT MODAL CONTRACT */}
       <BootstrapDialog
         fullWidth
         maxWidth="md"
@@ -216,290 +396,302 @@ const RoomCard = ({ room }) => {
         open={openModal}
       >
         <BootstrapDialogTitle id="customized-dialog-title" onClose={handleCloseModal}>
-          {`Contrato | Habitación: ${name}`}
+          {`Contrato | Habitación: ${name} ${room.status === 'occupied' ? '|' : ''}`}
+          {room.status === 'occupied' && (
+            <Button
+              variant="contained"
+              startIcon={<PictureAsPdfIcon />}
+              onClick={() => generatePDF(contract)}
+              sx={{
+                ml: 2,
+              }}
+            >
+              Generar PDF
+            </Button>
+          )}
         </BootstrapDialogTitle>
-        <DialogContent dividers>
-          <Grid container spacing={2}>
+        {(room.status === 'cleaning' ? (
+          <DialogContent dividers>
+            <Typography variant="h5" textAlign="center">
+              Esta habitación se encuentra en proceso de limpieza
+            </Typography>
+          </DialogContent>
+        ) : (
+          <DialogContent dividers>
+            <Grid container spacing={2}>
 
-            {numberClients.map(index => (
-              <ClientRow key={index} setValue={setRenters} index={index} />
-            ))}
+              {numberClients?.map(index => (
+                <ClientRow key={index} value={renters} setValue={setRenters} index={index} />
+              ))}
 
-            <Grid item xs={12} justify="flex-end">
-              <Box display="flex" justifyContent="flex-end">
-                <Button
+              <Grid item xs={12} justify="flex-end">
+                <Box display="flex" justifyContent="flex-end">
+                  <Button
+                    size="small"
+                    variant="contained"
+                    startIcon={<AddCircleOutlineIcon />}
+                    onClick={handleClientsPerRoom}
+                  >
+                    añadir
+                  </Button>
+                </Box>
+              </Grid>
+
+              {/* ORIGIN DESTINY COUNTRY */}
+              <Grid item xs={12} md={4}>
+                <TextField
+                  fullWidth
                   size="small"
-                  variant="contained"
-                  startIcon={<AddCircleOutlineIcon />}
-                  onClick={handleClientsPerRoom}
-                >
-                  añadir
-                </Button>
-              </Box>
-            </Grid>
-
-            {/* ORIGIN DESTINY COUNTRY */}
-            <Grid item xs={12} md={4}>
-              <TextField
-                fullWidth
-                size="small"
-                label="Procedencia"
-                value={origin}
-                variant="standard"
-                onChange={(e) => setOrigin(e.target.value)}
-                inputProps={{
-                  autoComplete: 'new-password',
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <PublicIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={4}>
-              <TextField
-                fullWidth
-                size="small"
-                label="Destino"
-                value={destiny}
-                variant="standard"
-                onChange={(e) => setDestiny(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <DirectionsBusIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={4}>
-              <TextField
-                fullWidth
-                size="small"
-                label="Pais"
-                value={country}
-                variant="standard"
-                onChange={(e) => setCountry(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <FlagIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-
-            {/*   PROFESSION COMPANY NIT */}
-            <Grid item xs={12} md={4}>
-              <TextField
-                fullWidth
-                size="small"
-                label="Profesión"
-                value={profession}
-                variant="standard"
-                onChange={(e) => setProfession(e.target.value)}
-                inputProps={{
-                  autoComplete: 'new-password',
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <WorkIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={4}>
-              <TextField
-                fullWidth
-                size="small"
-                label="Empresa"
-                value={company}
-                variant="standard"
-                onChange={(e) => setCompany(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <ApartmentIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={4}>
-              <TextField
-                fullWidth
-                size="small"
-                label="NIT"
-                value={nit}
-                variant="standard"
-                onChange={(e) => setNit(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <PinIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-
-            {/* BIRTHDAY PHONE EMAIL */}
-            <Grid item xs={12} md={4}>
-              <TextField
-                fullWidth
-                type="date"
-                size="small"
-                label="Cumpleaños"
-                value={birthday}
-                variant="standard"
-                onChange={(e) => setBirthday(e.target.value)}
-                inputProps={{
-                  autoComplete: 'new-password',
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <CalendarMonthIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={4}>
-              <TextField
-                fullWidth
-                size="small"
-                label="Teléfono"
-                value={phone}
-                variant="standard"
-                onChange={(e) => setPhone(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <LocalPhoneIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={4}>
-              <TextField
-                fullWidth
-                size="small"
-                label="Email"
-                value={email}
-                type="email"
-                variant="standard"
-                onChange={(e) => setEmail(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <AlternateEmailIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} sx={{ my: 2 }}>
-              <Divider />
-            </Grid>
-
-            {/* DATE OF ADMISSION DEPARTURE RATE */}
-            <Grid item xs={12} md={4}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker
-                  readOnly
-                  fullWidth
-                  label="Fecha ingreso"
-                  value={dateOfAdmission}
-                  onChange={(e) => setDateOfAdmission(e.target.value)}
-                  renderInput={(params) => <TextField {...params} />}
+                  label="Procedencia"
+                  value={origin}
+                  variant="standard"
+                  onChange={(e) => setOrigin(e.target.value)}
+                  inputProps={{
+                    autoComplete: 'new-password',
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <PublicIcon />
+                      </InputAdornment>
+                    ),
+                  }}
                 />
-              </LocalizationProvider>
-            </Grid>
+              </Grid>
 
-            <Grid item xs={12} md={4}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker
-                  readOnly
+              <Grid item xs={12} md={4}>
+                <TextField
                   fullWidth
-                  label="Fecha salida"
-                  value={departureDate}
-                  onChange={(e) => setDepartureDate(e.target.value)}
-                  renderInput={(params) => <TextField {...params} />}
+                  size="small"
+                  label="Destino"
+                  value={destiny}
+                  variant="standard"
+                  onChange={(e) => setDestiny(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <DirectionsBusIcon />
+                      </InputAdornment>
+                    ),
+                  }}
                 />
-              </LocalizationProvider>
+              </Grid>
+
+              <Grid item xs={12} md={4}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  label="Pais"
+                  value={country}
+                  variant="standard"
+                  onChange={(e) => setCountry(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <FlagIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+
+              {/*   PROFESSION COMPANY NIT */}
+              <Grid item xs={12} md={4}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  label="Profesión"
+                  value={profession}
+                  variant="standard"
+                  onChange={(e) => setProfession(e.target.value)}
+                  inputProps={{
+                    autoComplete: 'new-password',
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <WorkIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={4}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  label="Empresa"
+                  value={company}
+                  variant="standard"
+                  onChange={(e) => setCompany(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <ApartmentIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={4}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  label="NIT"
+                  value={nit}
+                  variant="standard"
+                  onChange={(e) => setNit(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <PinIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+
+              {/* BIRTHDAY PHONE EMAIL */}
+              <Grid item xs={12} md={4}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DesktopDatePicker
+                    label="Cumpleaños"
+                    inputFormat="DD/MM/YYYY"
+                    value={birthday}
+                    onChange={(value) => setBirthday(value)}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
+              </Grid>
+
+              <Grid item xs={12} md={4}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  label="Teléfono"
+                  value={phone}
+                  variant="standard"
+                  onChange={(e) => setPhone(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <LocalPhoneIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={4}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  label="Email"
+                  value={email}
+                  type="email"
+                  variant="standard"
+                  onChange={(e) => setEmail(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AlternateEmailIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} sx={{ my: 2 }}>
+                <Divider />
+              </Grid>
+
+              {/* DATE OF ADMISSION DEPARTURE RATE */}
+              <Grid item xs={12} md={4}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateTimePicker
+                    readOnly
+                    fullWidth
+                    label="Fecha ingreso"
+                    inputFormat="DD/MM/YYYY hh:mm A"
+                    value={dateOfAdmission}
+                    onChange={(e) => setDateOfAdmission(e.target.value)}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
+              </Grid>
+
+              <Grid item xs={12} md={4}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateTimePicker
+                    readOnly
+                    fullWidth
+                    label="Fecha salida"
+                    inputFormat="DD/MM/YYYY hh:mm A"
+                    value={departureDate}
+                    onChange={(value) => setDepartureDate(value)}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
+              </Grid>
+
+              <Grid item xs={12} md={4}>
+                <TextField
+                  fullWidth
+                  label="Precio"
+                  value={rate}
+                  variant="outlined"
+                  onChange={(e) => setRate(e.target.value)}
+                  inputProps={{
+                    autoComplete: 'new-password',
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AttachMoneyIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={4}>
+                <FormControl fullWidth variant="standard">
+                  <InputLabel id="demo-simple-select-label">Maletas</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={baggage}
+                    label="Maletas"
+                    onChange={(e) => setBaggage(e.target.value)}
+                  >
+                    <MenuItem value={true}>Si</MenuItem>
+                    <MenuItem value={false}>No</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12} md={4}>
+                <FormControl fullWidth variant="standard">
+                  <InputLabel id="demo-simple-select-label">Pago</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={wayToPay}
+                    label="Pago"
+                    onChange={(e) => setWayToPay(e.target.value)}
+                  >
+                    <MenuItem value="cash">Efectivo</MenuItem>
+                    <MenuItem value="card">Tarjeta</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+
             </Grid>
 
-            <Grid item xs={12} md={4}>
-              <TextField
-                fullWidth
-                label="Precio"
-                value={rate}
-                variant="outlined"
-                onChange={(e) => setRate(e.target.value)}
-                inputProps={{
-                  autoComplete: 'new-password',
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <AttachMoneyIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={4}>
-              <FormControl fullWidth variant="standard">
-                <InputLabel id="demo-simple-select-label">Maletas</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={baggage}
-                  label="Maletas"
-                  onChange={(e) => setBaggage(e.target.value)}
-                >
-                  <MenuItem value={true}>Si</MenuItem>
-                  <MenuItem value={false}>No</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={4}>
-              <FormControl fullWidth variant="standard">
-                <InputLabel id="demo-simple-select-label">Pago</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={wayToPay}
-                  label="Pago"
-                  onChange={(e) => setWayToPay(e.target.value)}
-                >
-                  <MenuItem value="cash">Efectivo</MenuItem>
-                  <MenuItem value="card">Tarjeta</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-
-          </Grid>
-
-        </DialogContent>
+          </DialogContent>
+        ))}
         <DialogActions>
           <Button
             onClick={handleCloseModal}
@@ -507,7 +699,7 @@ const RoomCard = ({ room }) => {
             Cancelar
           </Button>
           <Button
-            onClick={handleCreateContract}
+            onClick={handleAction[status]}
             startIcon={<CheckIcon />}
             variant="contained"
             size="small"
