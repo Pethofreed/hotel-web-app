@@ -140,7 +140,6 @@ const RoomCard = ({ room }) => {
   const [destiny, setDestiny] = useState('');
   const [country, setCountry] = useState('');
   const [company, setCompany] = useState('');
-  const [contract, setContract] = useState({});
   const [baggage, setBaggage] = useState(true);
   const [message, setMessage] = useState(false);
   const [contractId, setContractId] = useState('');
@@ -156,7 +155,7 @@ const RoomCard = ({ room }) => {
     if (status === 'occupied' && dataReady) {
       const [{
         _id, origin, destiny, country, profession, company, nit, birthday,
-        phone, email, rate, baggage, wayToPay, renters, dateOfAdmission,
+        phone, email, rate, baggage, wayToPay, renters, dateOfAdmission, codeContract,
       } = {}] = contracts?.filter((data) => data.room === room.name);
 
       const values = {
@@ -174,6 +173,7 @@ const RoomCard = ({ room }) => {
         birthday,
         wayToPay,
         profession,
+        codeContract,
         dateOfAdmission,
       };
       return values;
@@ -225,7 +225,6 @@ const RoomCard = ({ room }) => {
       setWayToPay(wayToPay);
       setProfession(profession);
       setDateOfAdmission(dateOfAdmission);
-      setContract(defaultValues);
       const length = Object.keys(renters).length;
       setNumberClients(getNumberOfClients(length));
     }
@@ -401,7 +400,7 @@ const RoomCard = ({ room }) => {
             <Button
               variant="contained"
               startIcon={<PictureAsPdfIcon />}
-              onClick={() => generatePDF(contract)}
+              onClick={() => generatePDF(defaultValues)}
               sx={{
                 ml: 2,
               }}
