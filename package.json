@@ -28,6 +28,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "run-prod": "export REACT_APP_MONARCA_HOST=https://monarca-api-production.up.railway.app && npm start",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

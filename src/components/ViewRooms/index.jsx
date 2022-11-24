@@ -96,7 +96,7 @@ const ViewRooms = () => {
     try {
       const { data } = await axios({
         method: 'PUT',
-        baseURL: process.env.REACT_APP_SERVER || 'http://localhost:8000',
+        baseURL: process.env.REACT_APP_MONARCA_HOST || 'http://localhost:8000',
         url: '/rooms/update',
         data: { _id, available: !available }
       })
@@ -117,7 +117,7 @@ const ViewRooms = () => {
     try {
       const { data } = await axios({
         method: 'PUT',
-        baseURL: process.env.REACT_APP_SERVER || 'http://localhost:8000',
+        baseURL: process.env.REACT_APP_MONARCA_HOST || 'http://localhost:8000',
         url: '/rooms/update',
         data: { _id, name: newName }
       })

@@ -16,7 +16,7 @@ export const getContracts = () => {
     try {
       const { data } = await axios({
         method: 'GET',
-        baseURL: process.env.REACT_APP_SERVER || 'http://localhost:8000',
+        baseURL: process.env.REACT_APP_MONARCA_HOST || 'http://localhost:8000',
         url: '/contracts/get',
       })
       dispatch({type: CONTRACT_SUCCESS, payload: data })
@@ -30,7 +30,7 @@ export const getAllContracts = () => {
     try {
       const { data } = await axios({
         method: 'GET',
-        baseURL: process.env.REACT_APP_SERVER || 'http://localhost:8000',
+        baseURL: process.env.REACT_APP_MONARCA_HOST || 'http://localhost:8000',
         url: '/contracts/getAll',
       })
       dispatch({type: ALL_CONTRACT_SUCCESS, payload: data })

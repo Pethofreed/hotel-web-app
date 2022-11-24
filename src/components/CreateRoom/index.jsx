@@ -42,7 +42,7 @@ const CreateRoom = () => {
     try {
       const { data } = await axios ({
         method: 'POST',
-        baseURL: process.env.REACT_APP_SERVER || 'http://localhost:8000',
+        baseURL: process.env.REACT_APP_MONARCA_HOST || 'http://localhost:8000',
         url: '/rooms/create',
         data: { name, available, status: 'free' },
         // headers: {

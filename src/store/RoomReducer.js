@@ -14,7 +14,7 @@ export const getRooms = () => {
     try {
       const { data } = await axios({
         method: 'GET',
-        baseURL: process.env.REACT_APP_SERVER || 'http://localhost:8000',
+        baseURL: process.env.REACT_APP_MONARCA_HOST || 'http://localhost:8000',
         url: '/rooms/get',
       })
       dispatch({type: ROOMS_SUCCESS, payload: data })
