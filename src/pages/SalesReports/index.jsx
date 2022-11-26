@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllContracts } from '../../store/ContractReducer';
 import { styled } from '@mui/material/styles';
@@ -6,6 +6,7 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import Paper from '@mui/material/Paper';
 import { Box, Button, Divider, IconButton, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import Report from "../../components/watchReport";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -29,12 +30,19 @@ const dispatch = useDispatch();
     dispatch(getAllContracts())
   },[])
 
+  const [openModal, setOpenModal] =  useState (false);
+  const [data, setData] =  useState ({});
+
+  const handleChange = (data) => {
+    setData(data);
+    setOpenModal(!openModal)
+  };
+
   const {
       allContracts
   } = useSelector(({ContractReducer})=> ({
     allContracts: ContractReducer.allContracts,
   }))
-  console.log(allContracts)
 
   function createData(codeContract, contractStatus, dateOfAdmission, departureDate, phone, origin, destiny) {
     return {codeContract, contractStatus, dateOfAdmission, departureDate, phone, origin, destiny };
@@ -102,8 +110,8 @@ const dispatch = useDispatch();
                   {row.destiny}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  <IconButton>
-                  <RemoveRedEyeIcon />
+                  <IconButton onClick={() => handleChange(row)}>
+                    <RemoveRedEyeIcon />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -111,6 +119,7 @@ const dispatch = useDispatch();
           </TableBody>
         </Table>
       </TableContainer>
+      <Report open={openModal} setValue={setOpenModal} roonData={data} />
     </Box>
   )
 }
