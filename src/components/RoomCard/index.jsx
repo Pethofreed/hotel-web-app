@@ -117,7 +117,7 @@ const labelButton = {
 const RoomCard = ({ room }) => {
 
   const { contracts = [] } = useSelector(selectContracts());
-
+  console.log('xxx contracts: ', contracts);
   const { name, status } = room;
   const dataReady = !!contracts && contracts.length > 0;
 
