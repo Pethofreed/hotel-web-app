@@ -13,7 +13,6 @@ import BedIcon from '@mui/icons-material/Bed';
 import TableBody from '@mui/material/TableBody';
 import TableHead from '@mui/material/TableHead';
 import DialogTitle from '@mui/material/DialogTitle';
-import { getRooms } from "../../store/reducers/rooms";
 import { useDispatch, useSelector } from "react-redux";
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -26,6 +25,7 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import ChangeCircleRoundedIcon from '@mui/icons-material/ChangeCircleRounded';
 import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
+import { getRooms, setRooms, setRoomsError } from "../../store/reducers/rooms";
 import CleaningServicesRoundedIcon from '@mui/icons-material/CleaningServicesRounded';
 import { Button, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import { selectRooms } from "../../helpers/selectors";
@@ -97,7 +97,7 @@ const ViewRooms = () => {
         url: '/rooms/update',
         data: { _id, available: !available }
       })
-      dispatch({type: 'ROOMS_SUCCESS', payload: data })
+      dispatch(setRooms(data));
       setOpenModal(false);
       setError(false);
       showAlert(`Habitación #${name} || Cambio de "${available ? 'Disponible' : 'No disponible'}" =>  ${available ? 'No disponible' : 'Disponible'}`);
@@ -105,7 +105,7 @@ const ViewRooms = () => {
       setOpenModal(false);
       setError(true);
       showAlert('Error intentando cambiar el estado, contacte al admin.');
-      dispatch({type: 'ROOMS_ERROR', payload: error })
+      dispatch(setRoomsError(error))
     }
   };
 
@@ -118,7 +118,7 @@ const ViewRooms = () => {
         url: '/rooms/update',
         data: { _id, name: newName }
       })
-      dispatch({type: 'ROOMS_SUCCESS', payload: data })
+      dispatch(setRooms(data));
       setOpenModalEdit(false);
       showAlert('¡Cambio de nombre exitoso!');
       setError(false);
@@ -126,7 +126,7 @@ const ViewRooms = () => {
       setOpenModalEdit(false);
       setError(true);
       showAlert('Error intentando cambiar el nombre, contacte al admin.');
-      dispatch({type: 'ROOMS_ERROR', payload: error })
+      dispatch(setRoomsError(error));
     }
   };
 

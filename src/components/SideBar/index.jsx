@@ -9,6 +9,7 @@ import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRigh
 import HailRoundedIcon from '@mui/icons-material/HailRounded';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux"
+import { changeSection } from '../../store/reducers/section';
 
 const useStyles = makeStyles()((theme) => ({
   navSection: {
@@ -48,7 +49,7 @@ const SideBar = () => {
   const { classes } = useStyles();
 
   const handleNavigate = (section, url) => {
-    dispatch({ type: 'CHANGE_SECTION', payload: section });
+    dispatch(changeSection(section));
     navigate(url);
   };
 

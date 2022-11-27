@@ -17,6 +17,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import PublicIcon from '@mui/icons-material/Public';
 import { getRooms } from "../../store/reducers/rooms";
 import { useDispatch, useSelector } from "react-redux";
+import { selectContracts } from "../../helpers/selectors";
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import { getContracts } from '../../store/reducers/contract';
@@ -33,8 +34,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import BedroomParentRoundedIcon from '@mui/icons-material/BedroomParentRounded';
 import CleaningServicesRoundedIcon from '@mui/icons-material/CleaningServicesRounded';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { setContracts, setError as setContractError } from '../../store/reducers/contract';
 import { Box, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
-import { selectContracts } from "../../helpers/selectors";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -275,14 +276,14 @@ const RoomCard = ({ room }) => {
           },
         })
         showAlert('¡Contrato creado!');
-        dispatch({type: 'CONTRACT_SUCCESS', payload: data })
+        dispatch(setContracts(data));
         dispatch(getRooms());
         setOpenModal(false);
         setError(false);
       } catch (error) {
         setError(true);
         showAlert('Ha ocurrido un error, contacte al admin.');
-        dispatch({type: 'CONTRACT_ERROR', payload: error })
+        dispatch(setContractError(error));
       }
     } else {
       setError(true)
@@ -303,7 +304,7 @@ const RoomCard = ({ room }) => {
           contractStatus: 'finished',
         },
       })
-      dispatch({type: 'CONTRACT_SUCCESS', payload: data })
+      dispatch(setContracts(data))
       showAlert('Contrato finalizado');
       dispatch(getRooms());
       setOpenModal(false);
@@ -311,7 +312,7 @@ const RoomCard = ({ room }) => {
     } catch (error) {
       setError(true);
       showAlert('Ha ocurrido un error, contacte al admin.');
-      dispatch({type: 'CONTRACT_ERROR', payload: error })
+      dispatch(setContractError(error))
     }
   };
 
@@ -334,7 +335,7 @@ const RoomCard = ({ room }) => {
     } catch (error) {
       setError(true);
       showAlert('Ha ocurrido un error, contacte al admin.');
-      dispatch({type: 'CONTRACT_ERROR', payload: error })
+      dispatch(setContractError(error))
     }
   };
 

@@ -26,7 +26,8 @@ const status = {
 };
 
 const SalesReports = () => {
-const dispatch = useDispatch();
+  const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getAllContracts())
   },[])

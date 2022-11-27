@@ -12,6 +12,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import AddHomeRoundedIcon from '@mui/icons-material/AddHomeRounded';
+import { setRooms, setRoomsError } from '../../store/reducers/rooms';
 import { Box, Button, CircularProgress, InputAdornment } from "@mui/material";
 
 const useStyles = makeStyles()((theme) => ({
@@ -49,13 +50,13 @@ const CreateRoom = () => {
         //   'Authorization': `Bearer ${token}`
         // },
       })
-      dispatch({type: "ROOM_CREATED_SUCCESS", payload: data})
+      dispatch(setRooms(data));
       showAlert('Se ha creado con exito.');
       setLoading(false);
       setName('');
       setError(false);
     } catch (error) {
-      dispatch({ type: "ROOM_CREATING_ERROR", payload: error })
+      dispatch(setRoomsError(error))
       setError(true);
       showAlert('Hubo un problema, no se pudo crear, contacte al admin.');
       setLoading(false)
