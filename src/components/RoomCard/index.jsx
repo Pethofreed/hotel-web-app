@@ -410,9 +410,12 @@ const RoomCard = ({ room }) => {
         </BootstrapDialogTitle>
         {(room.status === 'cleaning' ? (
           <DialogContent dividers>
-            <Typography variant="h5" textAlign="center">
-              Esta habitación se encuentra en proceso de limpieza
-            </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, justifyContent: 'center' }}>
+                <CleaningServicesRoundedIcon fontSize="large"/>
+                <Typography variant="h5">
+                  Esta habitación se encuentra en proceso de limpieza
+                </Typography>
+              </Box>
           </DialogContent>
         ) : (
           <DialogContent dividers>

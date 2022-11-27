@@ -32,10 +32,10 @@ export const generatePDF = (contract) => {
     const { identificationCard,name, lastname } = renters[key];
     return (
       <>
-        ${doc.text(`${cont}.`, 20, (215 + spacing))}
-        ${doc.text(identificationCard, 40, (215 + spacing))}
-        ${doc.text(name, 130, (215 + spacing))}
-        ${doc.text(lastname, 230, (215 + spacing))}
+        ${doc.text(`${cont}.`, 20, (220 + spacing))}
+        ${doc.text(identificationCard, 40, (220 + spacing))}
+        ${doc.text(name, 160, (220 + spacing))}
+        ${doc.text(lastname, 290, (220 + spacing))}
       </>
     )
   };
@@ -90,10 +90,10 @@ export const generatePDF = (contract) => {
   doc.text(`${date}`, 130, 47);
 
   // Huespeds list
-  doc.text('N°', 20, 215);
-  doc.text(' N° Identificación', 40, 215);
-  doc.text(' Nombres', 130, 215);
-  doc.text(' Apellidos', 230, 215);
+  doc.text('N°', 20, 220);
+  doc.text(' N° Identificación', 40, 220);
+  doc.text(' Nombres', 160, 220);
+  doc.text(' Apellidos', 290, 220);
 
   let cont = 1;
   while(cont <= countHuespeds) {
