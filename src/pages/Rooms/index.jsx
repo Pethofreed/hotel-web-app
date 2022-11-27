@@ -1,25 +1,22 @@
 import { useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import RoomCard from "../../components/RoomCard";
-import { getRooms } from "../../store/RoomReducer";
-import { getContracts } from "../../store/ContractReducer";
+import { getRooms } from "../../store/reducers/rooms";
 import { useDispatch, useSelector } from "react-redux";
+import { getContracts } from "../../store/reducers/contract";
+import { selectRooms } from "../../helpers/selectors";
 
 const Rooms = () => {
 
-  const dispatch = useDispatch()
-
-  const {
-    rooms
-  } = useSelector(({ RoomReducer }) => ({
-    rooms: RoomReducer.rooms
-  }));
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getRooms())
     dispatch(getContracts())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const { rooms = [] } = useSelector(selectRooms());
 
   const hasData = !!rooms && rooms.length > 0;
 

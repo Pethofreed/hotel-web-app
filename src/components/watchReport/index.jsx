@@ -6,7 +6,7 @@ const Report = ({ open, setValue, roomData  }) => {
   const handleCloseModal = () => {
     setValue (!open)
   };
-  console.log(roomData);
+
   return (
     <Dialog
       open={open}

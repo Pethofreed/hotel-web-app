@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllContracts } from '../../store/ContractReducer';
+import { getAllContracts } from '../../store/reducers/contract';
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import Paper from '@mui/material/Paper';
 import { Box, Button, Divider, IconButton, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Report from "../../components/watchReport";
+import { selectRooms } from "../../helpers/selectors";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -38,11 +39,7 @@ const dispatch = useDispatch();
     setOpenModal(!openModal)
   };
 
-  const {
-      allContracts
-  } = useSelector(({ContractReducer})=> ({
-    allContracts: ContractReducer.allContracts,
-  }))
+  const { allContracts } = useSelector(selectRooms());
 
   function createData(codeContract, contractStatus, dateOfAdmission, departureDate, phone, origin, destiny) {
     return {codeContract, contractStatus, dateOfAdmission, departureDate, phone, origin, destiny };

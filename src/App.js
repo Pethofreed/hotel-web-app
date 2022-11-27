@@ -10,6 +10,7 @@ import Signin from '../src/pages/SignIn';
 import Dashboard from '../src/pages/Dashboard';
 import ManageRooms from '../src/pages/ManageRooms';
 import SalesReports from '../src/pages/SalesReports';
+import Reservations from './pages/Reservations';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="rooms" element={<Rooms />} />
           <Route path="manage-rooms" element={<ManageRooms />} />
           <Route path="sales-reports" element={<SalesReports />} />
+          <Route path="reservations" element={<Reservations />} />
         </Route>
       </Routes>
     </Router>

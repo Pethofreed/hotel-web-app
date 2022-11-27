@@ -1,23 +1,15 @@
-import thunk from 'redux-thunk';
-import logger from 'redux-logger';
-import { RoomReducer } from './RoomReducer';
-import { SectionReducer } from './SectionReducer';
-import { ContractReducer } from './ContractReducer';
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { configureStore } from'@reduxjs/toolkit';
+import { roomSlice } from './reducers/rooms';
+import { sectionSlice } from './reducers/section';
+import { contractSlice } from './reducers/contract';
+import { reservationSlice } from './reducers/reservations';
 
-const appReducers = combineReducers({
-  RoomReducer,
-  SectionReducer,
-  ContractReducer,
-})
 
-const rootReducer = (state, action) => {
-  if(action.type === 'USER_LOGOUT'){
-    state = undefined
-  }
-  return appReducers(state, action)
-}
-
-const middlewares = applyMiddleware(thunk, logger)
-
-export const store = createStore(rootReducer, middlewares)
+export const store = configureStore({
+  reducer: {
+    rooms: roomSlice.reducer,
+    section: sectionSlice.reducer,
+    contract: contractSlice.reducer,
+    reservations: reservationSlice.reducer,
+  },
+});

@@ -12,8 +12,8 @@ import { styled } from '@mui/material/styles';
 import BedIcon from '@mui/icons-material/Bed';
 import TableBody from '@mui/material/TableBody';
 import TableHead from '@mui/material/TableHead';
-import { getRooms } from "../../store/RoomReducer";
 import DialogTitle from '@mui/material/DialogTitle';
+import { getRooms } from "../../store/reducers/rooms";
 import { useDispatch, useSelector } from "react-redux";
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -28,6 +28,7 @@ import ChangeCircleRoundedIcon from '@mui/icons-material/ChangeCircleRounded';
 import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
 import CleaningServicesRoundedIcon from '@mui/icons-material/CleaningServicesRounded';
 import { Button, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
+import { selectRooms } from "../../helpers/selectors";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -66,11 +67,7 @@ const ViewRooms = () => {
   const [openModal, setOpenModal] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
 
-  const {
-    rooms
-  } = useSelector(({ RoomReducer }) => ({
-    rooms: RoomReducer.rooms
-  }));
+  const { rooms = [] } = useSelector(selectRooms());
 
   useEffect(() => {
     dispatch(getRooms())

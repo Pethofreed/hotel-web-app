@@ -14,12 +14,12 @@ import FlagIcon from '@mui/icons-material/Flag';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
-import { getRooms } from "../../store/RoomReducer";
 import PublicIcon from '@mui/icons-material/Public';
+import { getRooms } from "../../store/reducers/rooms";
 import { useDispatch, useSelector } from "react-redux";
 import ApartmentIcon from '@mui/icons-material/Apartment';
-import { getContracts } from '../../store/ContractReducer';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import { getContracts } from '../../store/reducers/contract';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import BlockRoundedIcon from '@mui/icons-material/BlockRounded';
@@ -34,6 +34,7 @@ import BedroomParentRoundedIcon from '@mui/icons-material/BedroomParentRounded';
 import CleaningServicesRoundedIcon from '@mui/icons-material/CleaningServicesRounded';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { Box, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { selectContracts } from "../../helpers/selectors";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -114,14 +115,10 @@ const labelButton = {
 
 const RoomCard = ({ room }) => {
 
-    const {
-      contracts
-    } = useSelector(({ContractReducer})=> ({
-      contracts: ContractReducer.contracts,
-    }));
+  const { contracts = [] } = useSelector(selectContracts());
 
-    const { name, status } = room;
-    const dataReady = !!contracts && contracts.length > 0;
+  const { name, status } = room;
+  const dataReady = !!contracts && contracts.length > 0;
 
   useEffect(() => {
     dispatch(getContracts())

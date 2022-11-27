@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { makeStyles } from 'tss-react/mui';
 import Avatar from '@mui/material/Avatar';
 import { useSelector } from "react-redux"
+import { selectSection } from "../../helpers/selectors";
 
 const useStyles = makeStyles()((theme) => ({
   container: {
@@ -30,11 +31,7 @@ const InfoBar = () => {
 
   const { classes } = useStyles();
 
-  const {
-    section
-  } = useSelector(({SectionReducer})=> ({
-    section: SectionReducer.section,
-  }))
+  const { section } = useSelector(selectSection());
 
   return (
     <Box className={classes.container}>
