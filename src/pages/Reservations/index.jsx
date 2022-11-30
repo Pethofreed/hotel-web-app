@@ -9,6 +9,7 @@ import { changeSection } from '../../store/reducers/section';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import ViewReservations from '../../components/ViewReservations';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -124,10 +125,13 @@ const Reservations = () => {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            Tab con reservas
+            <ViewReservations />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <CreateReservationForm />
+            <CreateReservationForm
+              handleClose={handleCloseModal}
+              changeTab={setValue}
+            />
           </TabPanel>
         </Box>
         </Typography>

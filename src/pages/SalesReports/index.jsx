@@ -7,7 +7,8 @@ import Paper from '@mui/material/Paper';
 import { Box, Button, Divider, IconButton, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Report from "../../components/watchReport";
-import { selectRooms } from "../../helpers/selectors";
+import { selectContracts } from "../../helpers/selectors";
+import moment from "moment";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -21,8 +22,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const status = {
   finished: "Finalizado",
-  initiated
-  : "Iniciado"
+  initiated: "Iniciado"
 };
 
 const SalesReports = () => {
@@ -40,15 +40,60 @@ const SalesReports = () => {
     setOpenModal(!openModal)
   };
 
-  const { allContracts } = useSelector(selectRooms());
+  const { allContracts } = useSelector(selectContracts());
 
-  function createData(codeContract, contractStatus, dateOfAdmission, departureDate, phone, origin, destiny) {
-    return {codeContract, contractStatus, dateOfAdmission, departureDate, phone, origin, destiny };
+  function createData(
+    codeContract,
+    contractStatus,
+    dateOfAdmission,
+    departureDate,
+    phone,
+    origin,
+    destiny,
+    room,
+    birthday,
+    country,
+    profession,
+    company,
+    nit,
+    email,
+    rate,
+    baggage,
+    wayToPay,
+    renters
+  ) {
+    return {
+      codeContract,
+      contractStatus,
+      dateOfAdmission,
+      departureDate,
+      phone,
+      origin,
+      destiny,
+      room,
+      birthday,
+      country,
+      profession,
+      company,
+      nit,
+      email,
+      rate,
+      baggage,
+      wayToPay,
+      renters
+    };
   }
 
   const dataReady = !!allContracts && allContracts.length > 0;
-  const rows = dataReady && allContracts.map((contract) => createData(contract.codeContract, contract.contractStatus
-    , contract.dateOfAdmission, contract.departureDate, contract.phone, contract.origin, contract.destiny));
+  const rows = dataReady && allContracts.map((contract) => createData(
+    contract.codeContract, contract.contractStatus,
+    contract.dateOfAdmission, contract.departureDate,
+    contract.phone, contract.origin, contract.destiny,
+    contract.room, contract.birthday, contract.country,
+    contract.company, contract.nit, contract.profession,
+    contract.email, contract.rate,  contract.baggage,
+    contract.wayToPay, contract.renters
+  ));
 
   return (
     <Box sx={{ p: 5 }}>
@@ -93,10 +138,10 @@ const SalesReports = () => {
                   { status[row.contractStatus] }
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {row.dateOfAdmission}
+                  {moment(row.dateOfAdmission).format('L LT')}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {row.departureDate}
+                  {moment(row.departureDate).format('L LT')}
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {row.phone}
@@ -117,7 +162,7 @@ const SalesReports = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Report open={openModal} setValue={setOpenModal} roonData={data} />
+      <Report open={openModal} setValue={setOpenModal} roomData={data} />
     </Box>
   )
 }

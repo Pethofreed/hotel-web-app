@@ -4,13 +4,16 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { Box, Button, FormControl, Grid, InputAdornment, InputLabel, NativeSelect, TextField } from '@mui/material';
+import { getReservations, setReservations } from '../../store/reducers/reservations';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { selectRooms } from '../../helpers/selectors';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 
-const CreateReservationForm = ({ handleClose }) => {
 
+const CreateReservationForm = ({ handleClose, changeTab }) => {
+
+  const dispatch = useDispatch();
   const { rooms = [] } = useSelector(selectRooms());
 
   const roomNumbers = rooms.map(({ name }) => name);
@@ -21,23 +24,32 @@ const CreateReservationForm = ({ handleClose }) => {
   const [reservationDate, setReservationDate] = useState(new Date());
   const [observations, setObservations] = useState('');
 
+  const handleChangeDate = (newValue) => {
+    setReservationDate(new Date(newValue));
+  };
+
   const handleSubmit = async () => {
     try {
+      const body = {
+        room,
+        phone,
+        fullName,
+        observations,
+        reservationDate,
+        status: 'active',
+      };
+
       const { data } = await axios({
-        method: 'PUT',
+        method: 'POST',
         baseURL: process.env.REACT_APP_MONARCA_HOST || 'http://localhost:8000',
-        url: '/contracts/finish',
-        data: {
-          room,
-          phone,
-          fullName,
-          observations,
-          reservationDate,
-        },
+        url: '/reservations/create',
+        data: body,
       })
-      // dispatch({type: 'CONTRACT_SUCCESS', payload: data })
-      // showAlert('Contrato finalizado');
-      // dispatch(getRooms());
+
+      dispatch(setReservations(data));
+      // showAlert('La reserva ha sido registrada');
+      dispatch(getReservations());
+      changeTab(0);
       // setOpenModal(false);
       // setError(false);
     } catch (error) {
@@ -97,10 +109,10 @@ const CreateReservationForm = ({ handleClose }) => {
         <Grid xs={12} md={6} sx={{ mt: 3 }}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateTimePicker
-              label="Cumpleaños"
+              label="Fecha reserva"
               inputFormat="DD/MM/YYYY hh:mm a"
               value={reservationDate}
-              onChange={(value) => setReservationDate(value)}
+              onChange={handleChangeDate}
               renderInput={(params) => <TextField {...params} />}
             />
           </LocalizationProvider>
@@ -140,7 +152,7 @@ const CreateReservationForm = ({ handleClose }) => {
         </Grid>
       </Grid>
 
-      <Grid xs={12} sx={{ mt: 2}}>
+      <Grid xs={12} sx={{ mt: 2}} textAlign="end">
         <Button onClick={handleClose}>
           Cancelar
         </Button>

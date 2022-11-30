@@ -117,7 +117,6 @@ const labelButton = {
 const RoomCard = ({ room }) => {
 
   const { contracts = [] } = useSelector(selectContracts());
-  console.log('xxx contracts: ', contracts);
   const { name, status } = room;
   const dataReady = !!contracts && contracts.length > 0;
 
@@ -292,6 +291,7 @@ const RoomCard = ({ room }) => {
   };
 
   const handleFinishContract = async () => {
+    console.log(contractId)
     try {
       const { data } = await axios({
         method: 'PUT',
