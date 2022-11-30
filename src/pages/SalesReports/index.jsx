@@ -9,6 +9,7 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Report from "../../components/watchReport";
 import { selectContracts } from "../../helpers/selectors";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -27,8 +28,11 @@ const status = {
 
 const SalesReports = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const token = localStorage.getItem('hotel-token');
 
   useEffect(() => {
+    if (!token) navigate('/')
     dispatch(getAllContracts())
   },[])
 

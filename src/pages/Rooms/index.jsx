@@ -5,12 +5,16 @@ import { getRooms } from "../../store/reducers/rooms";
 import { useDispatch, useSelector } from "react-redux";
 import { getContracts } from "../../store/reducers/contract";
 import { selectRooms } from "../../helpers/selectors";
+import { useNavigate } from "react-router-dom";
 
 const Rooms = () => {
 
+  const token = localStorage.getItem('hotel-token');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!token) navigate('/')
     dispatch(getRooms())
     dispatch(getContracts())
     // eslint-disable-next-line react-hooks/exhaustive-deps

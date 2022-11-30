@@ -8,19 +8,32 @@ import CircularProgress from '@mui/material/CircularProgress';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import axios from "axios";
 const image = "https://images.unsplash.com/photo-1517840901100-8179e982acb7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aG90ZWx8ZW58MHx8MHx8&w=1000&q=80";
 
 const SignIn = () => {
 
-  const navigate = useNavigate()
-  const [email, setEmail] = useState('');
+  const navigate = useNavigate();
+  const [user, setUser] = useState('');
+  const [error, setError] = useState(false);
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     setLoading(true);
-    navigate('dashboard')
-    // setLoading(false);
+    try {
+      const { data } = await axios({
+        method: 'POST',
+        baseURL: process.env.REACT_APP_MONARCA_HOST,
+        url: '/user/signin',
+        data: { user, password }
+      })
+      localStorage.setItem('hotel-token', data)
+      navigate('dashboard')
+    } catch (error) {
+      setError(true);
+    }
+    setLoading(false);
   };
 
   return (
@@ -63,10 +76,13 @@ const SignIn = () => {
           <Grid item xs={12}>
             <TextField
               required
-              label="Correo"
+              label="Usuario"
               fullWidth
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={user}
+              onChange={(e) => {
+                setUser(e.target.value);
+                setError(false);
+              }}
               inputProps={{
                 autoComplete: 'new-password',
               }}
@@ -87,7 +103,10 @@ const SignIn = () => {
               type="password"
               fullWidth
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setError(false)
+              }}
               inputProps={{
                 autoComplete: 'new-password',
               }}
@@ -101,6 +120,21 @@ const SignIn = () => {
             />
           </Grid>
 
+          {error && (
+            <Typography
+              sx={{
+                mt: 1,
+                mb: -2,
+                width: '100%',
+                color: 'error.main',
+                fontWeight: 'bold',
+                textAlign: 'center',
+              }}
+            >
+              *Usuario y/o contraseña inválido*
+            </Typography>
+          )}
+
           <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
             {loading ? (
               <CircularProgress  />
@@ -108,6 +142,7 @@ const SignIn = () => {
               <Button
                 variant="contained"
                 onClick={handleSignIn}
+                disabled={(!user || !password)}
               >
                 Iniciar
               </Button>

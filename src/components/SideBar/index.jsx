@@ -54,7 +54,8 @@ const SideBar = () => {
   };
 
   const handleLogOut = () => {
-    dispatch({ type: 'USER_LOGOUT' })
+    dispatch({ type: 'USER_LOGOUT' });
+    localStorage.removeItem('hotel-token');
     navigate('/');
   };
 

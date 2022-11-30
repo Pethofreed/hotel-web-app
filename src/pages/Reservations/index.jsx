@@ -82,8 +82,10 @@ const Reservations = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(true);
   const [value, setValue] = useState(0);
+  const token = localStorage.getItem('hotel-token');
 
   useEffect(() => {
+    if (!token) navigate('/')
     dispatch(getRooms())
     setOpen(true)
   }, [])

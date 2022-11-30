@@ -2,10 +2,11 @@ import Alert from '@mui/material/Alert';
 import { makeStyles } from 'tss-react/mui';
 import { Box, Button, InputAdornment } from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import TextField from '@mui/material/TextField';
-import { useState } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
+import TextField from '@mui/material/TextField';
 import ManageResources from '../ManageResources';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles()((theme) => ({
   roomsContainer: {
@@ -30,9 +31,11 @@ const useStyles = makeStyles()((theme) => ({
 }));
 
 const ManageRooms = () => {
+  const navigate = useNavigate();
   const { classes } = useStyles();
   const [access, setAcceess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const token = localStorage.getItem('hotel-token');
   const [secretToken, setSecretToken] = useState('');
   const [tokenError, setTokenError] = useState(false);
 
@@ -42,6 +45,10 @@ const ManageRooms = () => {
     setTokenError(true);
     setLoading(false);
   };
+
+  useEffect(() => {
+    if (!token) navigate('/')
+  }, [])
 
   return (
     <Box className={classes.roomsContainer}>
