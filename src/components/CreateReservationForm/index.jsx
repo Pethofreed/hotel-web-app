@@ -16,7 +16,7 @@ const CreateReservationForm = ({ handleClose, changeTab }) => {
   const dispatch = useDispatch();
   const { rooms = [] } = useSelector(selectRooms());
 
-  const roomNumbers = rooms.map(({ name }) => name);
+  const roomNumbers = rooms?.map(({ name }) => name);
 
   const [room, setRoom] = useState(roomNumbers?.[0]);
   const [phone, setPhone] = useState('');
@@ -41,7 +41,7 @@ const CreateReservationForm = ({ handleClose, changeTab }) => {
 
       const { data } = await axios({
         method: 'POST',
-        baseURL: process.env.REACT_APP_MONARCA_HOST || 'http://localhost:8000',
+        baseURL: process.env.REACT_APP_MONARCA_HOST,
         url: '/reservations/create',
         data: body,
       })

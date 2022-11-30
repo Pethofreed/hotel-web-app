@@ -5,11 +5,12 @@ import { styled } from '@mui/material/styles';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import { Box, Dialog, DialogContent, DialogTitle, IconButton, Tab, Tabs, Typography } from "@mui/material";
 import CreateReservationForm from '../../components/CreateReservationForm';
+import ViewReservations from '../../components/ViewReservations';
 import { changeSection } from '../../store/reducers/section';
 import CloseIcon from '@mui/icons-material/Close';
+import { getRooms } from '../../store/reducers/rooms';
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import ViewReservations from '../../components/ViewReservations';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -83,6 +84,7 @@ const Reservations = () => {
   const [value, setValue] = useState(0);
 
   useEffect(() => {
+    dispatch(getRooms())
     setOpen(true)
   }, [])
 

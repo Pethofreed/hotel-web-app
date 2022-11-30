@@ -252,7 +252,7 @@ const RoomCard = ({ room }) => {
       try {
         const { data } = await axios({
           method: 'POST',
-          baseURL: process.env.REACT_APP_MONARCA_HOST || 'http://localhost:8000',
+          baseURL: process.env.REACT_APP_MONARCA_HOST,
           url: '/contracts/create',
           data: {
             renters,
@@ -295,7 +295,7 @@ const RoomCard = ({ room }) => {
     try {
       const { data } = await axios({
         method: 'PUT',
-        baseURL: process.env.REACT_APP_MONARCA_HOST || 'http://localhost:8000',
+        baseURL: process.env.REACT_APP_MONARCA_HOST,
         url: '/contracts/finish',
         data: {
           _id: contractId,
@@ -320,7 +320,7 @@ const RoomCard = ({ room }) => {
     try {
       await axios({
         method: 'PUT',
-        baseURL: process.env.REACT_APP_MONARCA_HOST || 'http://localhost:8000',
+        baseURL: process.env.REACT_APP_MONARCA_HOST,
         url: '/rooms/update',
         data: {
           _id: room._id,

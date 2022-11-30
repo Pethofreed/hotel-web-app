@@ -1,9 +1,10 @@
-import { useSelect } from "@mui/base";
+
+import { useSelector } from 'react-redux';
 import { selectReservations } from '../../helpers/selectors';
 
 const ViewReservations = () => {
 
-  const { reservations } = useSelect(selectReservations());
+  const { reservations = {} } = useSelector(selectReservations());
 
   return (
     <>
