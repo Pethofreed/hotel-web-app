@@ -1,4 +1,5 @@
 import Card from '@mui/material/Card';
+import BedIcon from '@mui/icons-material/Bed';
 import CardActions from '@mui/material/CardActions';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import CardContent from '@mui/material/CardContent';
@@ -8,7 +9,7 @@ import Button from '@mui/material/Button';
 
 const ReservationCard = ({ data }) => {
   return (
-    <Card sx={{ minWidth: 275, boxShadow: 3, }}>
+    <Card sx={{ minWidth: 275, boxShadow: 3, mb: 2 }}>
       <CardContent>
         <Box
           sx={{
@@ -56,15 +57,59 @@ const ReservationCard = ({ data }) => {
             sx={{
               width: '50%',
               display: 'flex',
-              gap: 4,
+              gap: 5,
             }}
           >
-            <LocalPhoneIcon /> {data.phone}
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 3
+              }}
+            >
+              <LocalPhoneIcon /> {data.phone}
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 3
+              }}
+            >
+              <BedIcon /> {data.room}
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 3
+              }}
+            >
+              <BedIcon /> {data.room}
+            </Box>
           </Box>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            ml: 2,
+            mt: 2,
+          }}
+        >
+          <Typography>
+            {data.observations}
+          </Typography>
         </Box>
         </CardContent>
       <CardActions>
-        <Button size="small">Desactivar reserva</Button>
+        <Button
+        sx={{
+          color: 'error.main'
+        }}
+          size="small"
+        >
+          Desactivar reserva
+        </Button>
       </CardActions>
     </Card>
   );

@@ -5,7 +5,7 @@ import ReservationCard from '../ReservationCard';
 
 const ViewReservations = () => {
 
-  const { reservations = {} } = useSelector(selectReservations());
+  const { reservations = [] } = useSelector(selectReservations());
 
   return (
     reservations?.map((reservation) => (

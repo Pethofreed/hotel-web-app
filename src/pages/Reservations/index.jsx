@@ -20,6 +20,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
+    overflowY: 'auto',
+    maxHeight: 500,
   },
   '& .MuiDialogActions-root': {
     padding: theme.spacing(1),
