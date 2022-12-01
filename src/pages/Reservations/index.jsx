@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import { Box, Dialog, DialogContent, DialogTitle, IconButton, Tab, Tabs, Typography } from "@mui/material";
 import CreateReservationForm from '../../components/CreateReservationForm';
+import { getReservations } from '../../store/reducers/reservations';
 import ViewReservations from '../../components/ViewReservations';
 import { changeSection } from '../../store/reducers/section';
 import CloseIcon from '@mui/icons-material/Close';
@@ -86,6 +87,7 @@ const Reservations = () => {
 
   useEffect(() => {
     if (!token) navigate('/')
+    dispatch(getReservations())
     dispatch(getRooms())
     setOpen(true)
   }, [])
