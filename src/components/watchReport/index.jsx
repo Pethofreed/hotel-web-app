@@ -1,5 +1,7 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, Divider, Typography } from "@mui/material";
 import moment from "moment";
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import { generatePDF } from "../PDF";
 
 const status = {
   finished: "Finalizado",
@@ -188,6 +190,19 @@ const Report = ({ open, setValue, roomData  }) => {
             </Box>
           ))}
 
+        </Box>
+        <Box sx={{display: 'flex', justifyContent: 'flex-end', gap: 3}}>
+          <Button onClick={handleCloseModal}>SALIR</Button>
+          <Button
+              variant="contained"
+              startIcon={<PictureAsPdfIcon />}
+              onClick={() => generatePDF(roomData)}
+              sx={{
+                ml: 2,
+              }}
+            >
+              Generar PDF
+            </Button>
         </Box>
       </DialogContent>
     </Dialog>
