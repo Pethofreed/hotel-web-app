@@ -1,7 +1,9 @@
 import { useState } from "react";
 import Avatar from '@mui/material/Avatar';
+import { makeStyles } from 'tss-react/mui';
+import { useNavigate } from "react-router-dom";
 import TextField from '@mui/material/TextField';
-import { useNavigate } from "react-router-dom"
+import logo from '../../assets/logo_monarca.jpg';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Box, Button, Grid, Typography } from "@mui/material";
 import CircularProgress from '@mui/material/CircularProgress';
@@ -11,9 +13,15 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import axios from "axios";
 const image = "https://images.unsplash.com/photo-1517840901100-8179e982acb7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aG90ZWx8ZW58MHx8MHx8&w=1000&q=80";
 
-const SignIn = () => {
+const useStyles = makeStyles()((theme) => ({
+  image: {
+    width: '100%',
+  },
+}));
 
+const SignIn = () => {
   const navigate = useNavigate();
+  const { classes } = useStyles();
   const [user, setUser] = useState('');
   const [error, setError] = useState(false);
   const [password, setPassword] = useState('');
@@ -57,21 +65,27 @@ const SignIn = () => {
           p: { xs: 2, md: 4 },
           alignItems: 'center',
           flexDirection: 'column',
-          height: { sm: '400px', md: '300px' },
+          height: '350px',
           backgroundColor: '#FFFFFF',
         }}
       >
-        <Avatar sx={{ bgcolor: '#9c27b0', mb: 2 }}>
+        {/* <Avatar sx={{ bgcolor: '#9c27b0', mb: 2 }}>
           <LockOutlinedIcon />
-        </Avatar>
+        </Avatar> */}
+
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            width: 150,
+            height: 160,
+            mt: -4,
+          }}
+        >
+          <img className={classes.image} src={logo} alt="hotel-logo" />
+        </Box>
 
         <Grid container spacing={3}>
-
-          <Grid item xs={12}>
-            <Typography sx={{ textAlign: 'center', fontSize: 20 }}>
-              Iniciar Sesion
-            </Typography>
-          </Grid>
 
           <Grid item xs={12}>
             <TextField
