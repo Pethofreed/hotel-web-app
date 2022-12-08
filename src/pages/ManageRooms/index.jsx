@@ -36,12 +36,13 @@ const ManageRooms = () => {
   const [access, setAcceess] = useState(false);
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem('hotel-token');
-  const [secretToken, setSecretToken] = useState('');
+  // const [secretToken, setSecretToken] = useState('');
   const [tokenError, setTokenError] = useState(false);
 
   const handleTokenVerification = () => {
     setLoading(true);
-    if (secretToken === 'admin') setAcceess(true);
+    // if (secretToken === 'admin') setAcceess(true);
+    setAcceess(true);
     setTokenError(true);
     setLoading(false);
   };
@@ -62,9 +63,9 @@ const ManageRooms = () => {
               label={tokenError ? "Error" : "Token de ingreso"}
               helperText={tokenError && "Token incorrecto"}
               fullWidth
-              value={secretToken}
+              // value={secretToken}
               type="password"
-              onChange={(e) => setSecretToken(e.target.value)}
+              // onChange={(e) => setSecretToken(e.target.value)}
               inputProps={{
                 autoComplete: 'new-password',
               }}
