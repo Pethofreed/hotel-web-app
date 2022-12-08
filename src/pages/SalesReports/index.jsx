@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { styled } from '@mui/material/styles';
+import SearchIcon from '@mui/icons-material/Search';
 import { useDispatch, useSelector } from "react-redux";
 import { getAllContracts } from '../../store/reducers/contract';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -46,7 +47,8 @@ const SalesReports = () => {
   },[])
 
   const [openModal, setOpenModal] =  useState (false);
-  const [filter, setFilter] =  useState ('general');
+  const [filter, setFilter] =  useState('general');
+  const [filterActive, setFilterActive] = useState(false);
   const [data, setData] =  useState ({});
 
   const handleChange = (data) => {
@@ -120,17 +122,65 @@ const SalesReports = () => {
           marginBottom: 2
         }}
       >
-          <Button variant="contained" onClick={() => setFilter('general')}> Total </Button>
-          <Button variant="contained" onClick={() => setFilter('today')}> Hoy </Button>
-          <Button variant="contained" onClick={() => setFilter('week')}> Esta semana </Button>
-          <Button variant="contained" onClick={() => setFilter('month')}> Este mes </Button>
-          <Button variant="contained" onClick={() => setFilter('year')}> Este año </Button>
-          <Button variant="contained" onClick={() => {}}> Personalizado </Button>
+        <Button
+          startIcon={<SearchIcon />}
+          variant="contained"
+          onClick={() => {
+            setFilterActive(!filterActive)
+          }}
+        >
+          Buscar
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setFilter('today');
+            if (filterActive) setFilterActive(false);
+          }}
+        >
+          Hoy
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setFilter('week');
+            if (filterActive) setFilterActive(false);
+          }}
+        >
+          Esta semana
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setFilter('month');
+            if (filterActive) setFilterActive(false);
+          }}
+        >
+          Este mes
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setFilter('year');
+            if (filterActive) setFilterActive(false);
+          }}
+        >
+          Este año
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setFilter('general');
+            if (filterActive) setFilterActive(false);
+          }}
+        >
+          Total
+        </Button>
       </Box>
       <Divider sx={{ mb: 2 }} />
-      {filter !== 'general' && (
+      {(filter !== 'general' && !filterActive) && (
         <Typography
-          variant="h5"
+          variant="h6"
           component="div"
           sx={{
             display: 'flex',
@@ -138,63 +188,64 @@ const SalesReports = () => {
             fontWeight: 'bold',
             justifyContent: 'center',
             gap: 3,
-            mt: 3,
+            my: 1,
           }}
         >
           Filtrado: {parseFilter[filter]}
         </Typography>
       )}
-      <TableContainer component={Paper}>
-        <Table size="small" sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>CODIGO</StyledTableCell>
-              <StyledTableCell>ESTADO</StyledTableCell>
-              <StyledTableCell>INGRESO</StyledTableCell>
-              <StyledTableCell>SALIDA</StyledTableCell>
-              <StyledTableCell>TELEFONO</StyledTableCell>
-              <StyledTableCell>ORIGEN</StyledTableCell>
-              <StyledTableCell>DESTINO</StyledTableCell>
-              <StyledTableCell>VER</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {dataReady && rows.map((row) => (
-              <TableRow
-                key={row.codeContract}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.codeContract}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  { status[row.contractStatus] }
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {moment(row.dateOfAdmission).format('L LT')}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {moment(row.departureDate).format('L LT')}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {row.phone}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {row.origin}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {row.destiny}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  <IconButton onClick={() => handleChange(row)}>
-                    <RemoveRedEyeIcon />
-                  </IconButton>
-                </TableCell>
+      {!filterActive && (
+        <TableContainer component={Paper}>
+          <Table size="small" sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>CODIGO</StyledTableCell>
+                <StyledTableCell>ESTADO</StyledTableCell>
+                <StyledTableCell>INGRESO</StyledTableCell>
+                <StyledTableCell>SALIDA</StyledTableCell>
+                <StyledTableCell>TELEFONO</StyledTableCell>
+                <StyledTableCell>ORIGEN</StyledTableCell>
+                <StyledTableCell>DESTINO</StyledTableCell>
+                <StyledTableCell>VER</StyledTableCell>
               </TableRow>
-             ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {dataReady && rows.map((row) => (
+                <TableRow
+                  key={row.codeContract}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {row.codeContract}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    { status[row.contractStatus] }
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {moment(row.dateOfAdmission).format('L LT')}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {moment(row.departureDate).format('L LT')}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {row.phone}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {row.origin}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {row.destiny}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    <IconButton onClick={() => handleChange(row)}>
+                      <RemoveRedEyeIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>)}
       {!rows.length && (
         <Typography
           variant="h5"

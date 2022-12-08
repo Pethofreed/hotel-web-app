@@ -2,6 +2,7 @@ import Card from '@mui/material/Card';
 import BedIcon from '@mui/icons-material/Bed';
 import CardActions from '@mui/material/CardActions';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import NumbersIcon from '@mui/icons-material/Numbers';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { Avatar, Box } from '@mui/material';
@@ -85,13 +86,14 @@ const ReservationCard = ({ data }) => {
                 gap: 3
               }}
             >
-              <BedIcon /> {data.room}
+              <NumbersIcon /> {data.codeReservation}
             </Box>
           </Box>
         </Box>
         <Box
           sx={{
             display: 'flex',
+            textAlign: 'start',
             ml: 2,
             mt: 2,
           }}
