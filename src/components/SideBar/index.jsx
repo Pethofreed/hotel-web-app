@@ -2,6 +2,7 @@ import { makeStyles } from 'tss-react/mui';
 import { Box, Typography } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import ArticleRoundedIcon from '@mui/icons-material/ArticleRounded';
 import DomainAddRoundedIcon from '@mui/icons-material/DomainAddRounded';
 import PowerSettingsNewRoundedIcon from '@mui/icons-material/PowerSettingsNewRounded';
@@ -116,6 +117,18 @@ const SideBar = () => {
           </IconButton>
           <Typography className={classes.boldText}>
             RESERVAS
+          </Typography>
+        </Box>
+        <KeyboardArrowRightRoundedIcon />
+      </Box>
+
+      <Box className={classes.navSection} onClick={() => handleNavigate('Turno', 'turn')}>
+        <Box className={classes.flexInline}>
+          <IconButton className={classes.iconButtonColor}>
+            <ChangeCircleIcon />
+          </IconButton>
+          <Typography className={classes.boldText}>
+            MI TURNO
           </Typography>
         </Box>
         <KeyboardArrowRightRoundedIcon />

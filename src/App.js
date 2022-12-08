@@ -11,6 +11,7 @@ import Dashboard from '../src/pages/Dashboard';
 import ManageRooms from '../src/pages/ManageRooms';
 import SalesReports from '../src/pages/SalesReports';
 import Reservations from './pages/Reservations';
+import ManageTurn from './pages/ManageTurn';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="manage-rooms" element={<ManageRooms />} />
           <Route path="sales-reports" element={<SalesReports />} />
           <Route path="reservations" element={<Reservations />} />
+          <Route path="turn" element={<ManageTurn />} />
         </Route>
       </Routes>
     </Router>
