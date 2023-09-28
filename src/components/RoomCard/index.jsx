@@ -399,7 +399,9 @@ const RoomCard = ({ room }) => {
             <Button
               variant="contained"
               startIcon={<PictureAsPdfIcon />}
-              onClick={() => generatePDF(defaultValues)}
+              onClick={() => {
+                if (defaultValues) generatePDF(defaultValues)
+              }}
               sx={{
                 ml: 2,
               }}

@@ -2,6 +2,8 @@ import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import SideBar from "../../components/SideBar";
 import InfoBar from "../../components/InfoBar";
+import CircularProgress from '@mui/material/CircularProgress';
+import { Suspense } from "react";
 
 const Dashboard = () => {
   return (
@@ -20,8 +22,16 @@ const Dashboard = () => {
           flexDirection: 'column',
         }}
       >
-        <InfoBar />
-        <Outlet />
+        <Suspense
+          fallback={
+            <Box sx={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <CircularProgress color="inherit" />
+            </Box>
+          }
+        >
+          <InfoBar />
+          <Outlet />
+        </Suspense>
       </Box>
     </Box>
   )

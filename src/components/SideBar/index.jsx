@@ -69,6 +69,7 @@ const SideBar = () => {
         display: 'flex',
         flexDirection: 'column',
         boxSizing: 'border-box',
+        fontFamily: 'Lato, sans-serif',
         p: 2,
       }}
     >
@@ -86,7 +87,7 @@ const SideBar = () => {
 
       <Box className={classes.divider} />
 
-      <Box className={classes.navSection} onClick={() => handleNavigate('administrar habitaciones', 'manage-rooms')}>
+      <Box className={classes.navSection} onClick={() => handleNavigate('Administrador', 'manage-rooms')}>
         <Box className={classes.flexInline}>
           <IconButton className={classes.iconButtonColor}>
             <DomainAddRoundedIcon />

@@ -16,14 +16,15 @@ const useStyles = makeStyles()((theme) => ({
     boxSizing: 'border-box',
     borderBottom: '2px solid #ccc',
   },
-  spanName: {
-    color: '#272639',
-    fontWeight: 'bold',
-  },
   sectionTitle: {
     textTransform: 'uppercase',
     fontWeight: 'bold',
     borderBottom: '2px solid #ccc',
+    fontFamily: 'Lato, sans-serif',
+    color: '#444',
+  },
+  welcome: {
+    fontFamily: 'Lato, sans-serif',
   },
 }));
 
@@ -40,22 +41,9 @@ const InfoBar = () => {
           {section}
         </Typography>
       </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-        }}
-      >
-        <Avatar
-          sx={{ width: 27, height: 27, bgcolor: '#9c27b0', }}
-        >
-          L
-        </Avatar>
-        <Typography component="div">
-          ¡Hola <span className={classes.spanName}>Luis!</span>
-        </Typography>
-      </Box>
+      <Typography sx={{ color: '#444' }} component="div">
+        ¡Bienvenido!
+      </Typography>
     </Box>
   )
 }

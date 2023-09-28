@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
+import dayjs from 'dayjs';
 import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
-import MuiAlert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import Dialog from '@mui/material/Dialog';
+import MuiAlert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
@@ -82,11 +83,11 @@ const ViewRooms = () => {
     return {_id, name, available, createdAt, status };
   }
 
-  const getDate = (date) => {
-    const DDMMYYYY = date.split('T');
-    const hour = DDMMYYYY[1].split('.');
-    return `${DDMMYYYY[0]} | ${hour[0]}`;
-  };
+  function getDate(date) {
+    const parsedDate = dayjs(date).locale('es').format('MMM D, YYYY');
+    const parsedHour = dayjs(date).locale('es').format('h:mm A');
+    return <span>{`${parsedDate} / ${parsedHour}`}</span>;
+  }
 
   const changeRoomStatus = async (room) => {
     const { _id, name, available } = room;

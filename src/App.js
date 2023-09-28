@@ -4,14 +4,16 @@ import {
   Router,
   Route,
   Routes
-  } from 'react-router-dom';
-  import Rooms from '../src/pages/Rooms';
-import Signin from '../src/pages/SignIn';
-import Dashboard from '../src/pages/Dashboard';
-import ManageRooms from '../src/pages/ManageRooms';
-import SalesReports from '../src/pages/SalesReports';
-import Reservations from './pages/Reservations';
-import ManageTurn from './pages/ManageTurn';
+} from 'react-router-dom';
+import { lazy } from 'react';
+
+const Rooms = lazy(() => import('../src/pages/Rooms'));
+const Signin = lazy(() => import('../src/pages/SignIn'));
+const Dashboard = lazy(() => import('../src/pages/Dashboard'));
+const ManageTurn = lazy(() => import('../src/pages/ManageTurn'));
+const ManageRooms = lazy(() => import('../src/pages/ManageRooms'));
+const SalesReports = lazy(() => import('../src/pages/SalesReports'));
+const Reservations = lazy(() => import('../src/pages/Reservations'));
 
 function App() {
   return (

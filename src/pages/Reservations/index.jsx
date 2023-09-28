@@ -92,12 +92,13 @@ const Reservations = () => {
     dispatch(getReservations())
     dispatch(getRooms())
     setOpen(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleCloseModal = () => {
     setOpen(false);
     dispatch(changeSection('habitaciones'));
-    navigate('rooms');
+    navigate('../');
   };
 
   function a11yProps(index) {
